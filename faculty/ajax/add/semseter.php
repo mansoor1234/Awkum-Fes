@@ -27,3 +27,18 @@ extract($rows);
 </div>
 </div>
 <?php } ?>
+<?php 
+if (isset($_POST['ProgID'])) {
+  $ProgID=$_POST['ProgID'];
+  $get_prog_data=$conn->prepare("SELECT semester.srno,semester.semester FROM programs INNER JOIN program_semester ON programs.srno = program_semester.program_id INNER JOIN semester ON semester.srno = program_semester.semester_id WHERE program_id=:ProgID");
+  $get_prog_data->bindParam(":ProgID",$ProgID);
+  $get_prog_data->execute();
+  $rows1=$get_prog_data->fetchAll(PDO::FETCH_ASSOC);
+  $count=$get_prog_data->rowCount();
+     echo "<option value='0'>Choose Semester</option>";
+     for ($i=0; $i < $count; $i++) {?>
+        <option value="<?php echo $rows1[$i]['srno'];?>"><?php echo $rows1[$i]['semester']; ?></option>
+       <?php
+     }
+  }
+ ?>

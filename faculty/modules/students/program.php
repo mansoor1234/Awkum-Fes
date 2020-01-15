@@ -8,11 +8,27 @@
 <?php include(INCLUDE_PATH.'/layouts/links.php');?> 
 <!-- DataTables -->
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/choosen/chosen.css">
 <style>
   td,th,tr{
     height: 35px;
     border: 1px solid #f4f6f9;
     padding-left: 11px;
+  }.chosen-container{
+    width: 100%!important;
+  }.chosen-search-input{
+    width: 147.125px;
+    height: 33px!important;
+    border-radius: 50%!important; 
+    border: none!important;
+  }.chosen-select{
+    width: 100%;
+  }.chosen-single{
+    height: 40px!important;
+  }.chosen-single span{
+    margin-top: 8px;
+  }.chosen-single div{
+    top:10px!important;
   }
 </style>
 </head>
@@ -65,10 +81,7 @@
                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                  Add Program
                </button>
-               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2">
-                 Add Program Semesters
-               </button>
-              </div>
+               </div>
              </div>
             <!-- /.card -->
          </div>
@@ -123,57 +136,7 @@
           <!-- /.card -->
            </div> <!-- col-12 -->
         </div><!-- row -->
-        
-        <div class="row">
-         <div class="col-md-12 col-lg-12 col-sm-12">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">Program List</h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <table id="example2" class="w-100"  >
-                <thead>
-                <tr>
-                  <th>S.NO</th>
-                  <th>Program</th>
-                  <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody id="list">
-                    <?php
-                                         
-                    $c=1;
-                    $userID=$_SESSION['user']['User'];
-                    $get_users=mysqli_query($con,"SELECT * from programs");
-                    while($rows=mysqli_fetch_array($get_users)){
-                   ?>
-                <tr>
-                    <td><?php  echo $c++;?></td>
-                    <td><?php  echo $rows['program'];?></td>
-                   <td>
-                    <button class="btn btn-primary btn-xs editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['dept_id'];?>" onclick="deptEdit(this.value)" id="editBtn">Edit
-                    </button>
-                    <button class="btn btn-danger btn-xs deleteBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['dept_id'];?>"  id="deleteBtn">Delete
-                    </button></td>
-                </tr>
-                <?php }?>
-               </tbody>
-                <tfoot>
-                <tr>
-                  <th>S.NO</th>
-                  <th>Program</th>
-                  <th>Actions</th>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-           </div> <!-- col-12 -->
-        </div><!-- row -->
-      </div><!-- /.container-fluid -->
+    </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
@@ -213,6 +176,18 @@
                             </div>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col-lg-8  col-sm-12 offset-2 mb-2">
+                            <div class="form-group">
+                             <select  class="form-control createBtn chosen-select" name="semester" id="semester" >
+                                <option value="0">Choose Semesters</option>
+                                <option value="2">2 Semesters</option>
+                                <option value="4">4 Semesters</option>
+                                <option value="8">8 Semesters</option>
+                             </select>
+                            </div>
+                        </div>
+                       </div>
                   </div>
                   <!-- Modal footer -->
                   <div class="modal-footer">
@@ -327,13 +302,22 @@
 <!-- DataTables -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables/jquery.dataTables.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<!-- Choosen -->
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/chosen.jquery.js" type="text/javascript"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/docsupport/init.js" type="text/javascript" charset="utf-8"></script>
 <script>
+$(".chosen-select").chosen({
+  no_results_text: "Oops, nothing found!"
+});
+  $(".chosen-container").click(function(){ 
+    $("input").removeAttr("checked","checked");
+    $(this).parent("div").find("div.custom-control.custom-radio .enable-disable-btn").attr("checked","checked");
+ })
   $(function () {
     $("#example1").DataTable();
  });
-  $(function () {
-    $("#example2").DataTable();
- });
+
 </script>
 </body>
 </html>

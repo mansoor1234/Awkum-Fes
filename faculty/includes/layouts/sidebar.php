@@ -59,6 +59,12 @@
                   <p>Semesters</p>
                 </a>
               </li>
+              <li class="nav-item" id="Faculty" style="display: ;">
+                <a href="<?php echo BASE_URL;?>modules/students/faculty.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Faculty</p>
+                </a>
+              </li>
               <li class="nav-item" id="Courses" style="display: ;">
                 <a href="<?php echo BASE_URL;?>modules/students/courses.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

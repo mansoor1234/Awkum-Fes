@@ -1,4 +1,5 @@
 <?php include('../../config.php');?>
+<?php include(INCLUDE_PATH . '/logic/add/addStudents.php'); ?>
 <?php  loginCheck(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -6,11 +7,29 @@
 <?php include(INCLUDE_PATH.'/layouts/links.php');?> 
 <!-- DataTables -->
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/choosen/chosen.css">
 <style>
   td,th,tr{
     height: 35px;
     border: 1px solid #f4f6f9;
     padding-left: 11px;
+  }.chosen-container{
+    width: 100%!important;
+  }.chosen-search-input{
+    width: 147.125px;
+    height: 33px!important;
+    border-radius: 50%!important; 
+    border: none!important;
+  }.chosen-select{
+    width: 100%;
+  }.chosen-single{
+    height: 40px!important;
+  }.chosen-single span{
+    margin-top: 8px;
+  }.chosen-single div{
+    top:10px!important;
+  }#example1_wrapper .row{
+    overflow-x: scroll;
   }
 </style>
 </head>
@@ -43,101 +62,29 @@
    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
- 
- 
-       <div class="row">
+      <div class="row">
          <div class="col-12">
              <!-- general form elements -->
             <div class="card">
-              <div class="card-header form-card-header">
-                <h3 class="card-title">Add Students</h3>
+              <div class="row">
+                  <div class="col-md-6 offset-3" >
+                   <?php if(isset($_GET['success_message'])): ?>
+                    <div class="alert has-icon text-center" role="alert" id="success_message" style="border:1px dashed green; color: green;background-color: white"><i class="fa fa-check-circle alert-icon" ></i> <?php echo $_GET['success_message']; ?></div>
+                    <?php endif; ?>
+                    <?php if(isset($_GET['error_message'])): ?>
+                    <div class="alert has-icon text-center" role="alert" id="success_message" style="border:1px dashed #f3091e; color: red;background-color: white"><i class="fa fa-exclamation-triangle alert-icon"></i> <?php echo $_GET['error_message']; ?></div>
+                    <?php endif; ?>
+                  </div>
               </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form role="form"  method="post" enctype="multipart/form-data" id="addUserForm">
-                <div class="card-body">
-                  <center>
-                    <div id="error_messages_area">
-                    <div class="alert alert-success has-icon" role="alert" id="success_message" style="display: none;"><i class="fa fa-check-circle alert-icon"></i> User has been registered.</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="error_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> Sorry, Failed to register user.</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="type_error_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> Sorry, only JPG, JPEG & PNG  files are allowed.</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="size_error_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> Sorry, your image must be smaller than 1mb.</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="dimension_error_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> Sorry, your image dimension must be smaller than 295x413</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="password_email_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> You have entered invalid email address</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="password_error_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> Your password doesn't match</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="email_error_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> Email already taken</div>
-                    <div class="alert alert-danger has-icon" role="alert" id="username_error_message" style="display: none;"><i class="fa fa-exclamation-triangle alert-icon"></i> Username already taken</div>
-                 </center>
-
-                   <div class="row">
-                    <div class="col-lg-6 col-sm-12 mb-2">
-                        <div class="form-group">
-                           <input type="hidden" name="addUserInfo" value="set">
-                          <input class="form-control createBtn" type="text" placeholder="First Name" name="firstname" required>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 mb-2">
-                        <div class="form-group">
-                         <input class="form-control createBtn" type="text" placeholder="Username" name="lastname" id="username" required>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-6 col-sm-12 mb-2">
-                        <div class="form-group">
-                         <div class="input-group">
-                            <div class="custom-file">
-                              <input class="custom-file-input createBtn" type="file" name="image" >
-                              <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                            </div>
-                         </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 mb-2">
-                        <div class="form-group">
-                          <input class="form-control createBtn" type="email" name="email" required onkeyup="validateEmail(this.value)" placeholder="Email Address" id="user_email">
-                        </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-6 col-sm-12 mb-2">
-                        <div class="form-group">
-                         <input class="form-control createBtn" type="password" id="user_password" name="password" required placeholder="Password">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 mb-2">
-                        <div class="form-group">
-                          <input class="form-control createBtn" type="password" id="user_confirm_password" name="confirm_password" required onkeyup="confirmPassword(this.value)" placeholder="Confirm Password">
-                        </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- /.card-body -->
-                  <div>
-
-                     <small id="password_match_error_message" style="display: none;color:red">* Password doesn't match</small>
-                  </div>
-                  <div>
-                     <small id="invalid_email_error_message" style="display: none;color:red">* Invalid email address</small>
-                  </div>
-                <div class="card-footer float-sm-right d-flex">
-                   <button class="btn btn-light" type="reset" onclick="clearFormData()">Clear </button>
-                     <div id="target">
-                        <input  class="btn btn-primary mr-2 createBtn" type="submit" id="submit_btn" name="user_form" onclick="save(this.value)" value="Save">
-                        <button class="btn btn-primary"type="button" disabled id="saved_btn" style="display: none;">
-                          Saved
-                        </button>
-                     </div>
-                   <button class="btn btn-primary" type="button" disabled id="loading_btn" style="display: none;">
-                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Processing...
-                   </button>
-                </div>
-              </form>
-            </div>
+              <div class="btn-group">
+               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudent">
+                 Add Student
+               </button>
+              </div>
+             </div>
             <!-- /.card -->
          </div>
        </div>
-
        <div class="row">
          <div class="col-md-12 col-lg-12 col-sm-12">
           <div class="card">
@@ -146,15 +93,19 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example1" class="w-100"  >
+              <table id="example1" class="w-100 " >
                 <thead>
                 <tr>
                   <th>S.NO</th>
                   <th>Name</th>
-                  <th>Username</th>
+                  <th>Father Name</th>
+                  <th>Campus</th>
+                  <th>Dept</th>
+                  <th>Program</th>
+                  <th>Semester</th>
+                  <th>Reg.NO</th>
                   <th>Email</th>
-                  <th>Last Login</th>
-                  <th>Status</th>
+                  <th>Contact</th>
                   <th>Actions</th>
                 </tr>
                 </thead>
@@ -163,34 +114,26 @@
                                          
                     $c=1;
                     $userID=$_SESSION['user']['User'];
-                    $get_users=mysqli_query($con,"SELECT * from `rbac_user`  where user_type='0' ");
+                    $get_users=mysqli_query($con,"SELECT students.srno as STID,students.name,students.f_name,students.email,students.contact,students.reg_no,campus.campus,department.dept_name,programs.program,semester.semester FROM students LEFT JOIN campus ON students.campus_id = campus.srno LEFT JOIN department ON students.department_id = department.srno LEFT JOIN programs ON students.program_id = programs.srno LEFT JOIN semester ON students.semester_id = semester.srno");
                     while($rows=mysqli_fetch_array($get_users)){
-                    $image=$rows['image'];
-                    $status=$rows['status'];
                     ?>
                 <tr>
                     <td><?php  echo $c++;?></td>
-                    <td><img src="../../assets/img/users/<?php echo $rows['image'];?>" width="30" height="30" style="border-radius: 10px;"> <?php  echo $rows['firstname'];?></td>
-                    <td><?php  echo $rows['lastname'];?></td>
+                    <td><?php  echo $rows['name'];?></td>
+                    <td><?php  echo $rows['f_name'];?></td>
+                    <td><?php  echo $rows['campus'];?></td>
+                    <td><?php  echo $rows['dept_name'];?></td>
+                    <td><?php  echo $rows['program'];?></td>
+                    <td><?php  echo $rows['semester'];?></td>
+                    <td><?php  echo $rows['reg_no'];?></td>
                     <td><?php  echo $rows['email'];?></td>
-                    <td><?php  echo $rows['last_login'];?></td>
-                    <td><?php if($status==1 && $rows['id']!=$userID): ?>
-                    <div class="custom-control custom-switch">
-                      <input type="checkbox"  name="status" value="1" class="PermissionSetup custom-control-input editBtn" onchange="ChangeStatus(<?php echo $rows['id'];?>,0)" id="customSwitch<?php echo $rows['id'];?>" checked="">
-                      <label class="custom-control-label" for="customSwitch<?php echo $rows['id'];?>"></label>
-                    </div>
-                    <?php elseif($status==0 && $rows['id']!=$userID): ?>
-                    <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input PermissionSetup editBtn" name="status" value="1"  onchange="ChangeStatus(<?php echo $rows['id'];?>,1)" id="customSwitch2<?php echo $rows['id'];?>">
-                      <label class="custom-control-label" for="customSwitch2<?php echo $rows['id'];?>"></label>
-                    </div>
-                     <?php endif; ?>
-                    </td>
+                    <td><?php  echo $rows['contact'];?></td>
                     <td>
-                    <button class="btn btn-primary btn-sm editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['id'];?>" onclick="userEdit(this.value)" id="editBtn"><i class="far fa-edit" ></i> Edit
+                      <div class="btn-group">
+                    <button class="btn btn-primary btn-sm editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['STID'];?>" onclick="userEdit(this.value)" id="editBtn"> Edit
                     </button>
-                    <button class="btn btn-primary btn-sm editBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['id'];?>"  onclick="changeImage(this.value)" id="deleteBtn"> <i class="fas fa-upload"></i> Change Image
-                    </button></td>
+                    <button class="btn btn-danger btn-sm editBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['STID'];?>"  id="deleteBtn">Delete
+                    </button></div></td>
                 </tr>
                 <?php }?>
                </tbody>
@@ -198,10 +141,14 @@
                 <tr>
                   <th>S.NO</th>
                   <th>Name</th>
-                  <th>Username</th>
+                  <th>Father Name</th>
+                  <th>Campus</th>
+                  <th>Dept</th>
+                  <th>Program</th>
+                  <th>Semester</th>
+                  <th>Reg.NO</th>
                   <th>Email</th>
-                  <th>Last Login</th>
-                  <th>Status</th>
+                  <th>Contact</th>
                   <th>Actions</th>
                 </tr>
                 </tfoot>
@@ -229,10 +176,109 @@
   <!-- /.control-sidebar -->
 <?php include(INCLUDE_PATH.'/layouts/footer.php');?>
 </div>
+              <!-- MODAL ADD STUDENT START -->
+          <div class="modal fade" id="addStudent">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Add Student </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <form method="POST" id="addCampusForm">
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                           <input class="form-control createBtn" type="text" placeholder="Full Name" name="name" required onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                         <input class="form-control createBtn" type="text" placeholder="Father Name" name="fName" id="username" required onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                            <select  class="form-control createBtn  " name="campus" id="campus" onchange="getDepartment(this.value)">
+                                <?php $query=mysqli_query($con,"select * from campus"); ?>
+                                <option value="0">Choose Campus</option>
+                                <?php while($rows=mysqli_fetch_array($query)){ ?>
+                                <option value="<?php echo $rows['srno']; ?>"><?php echo $rows['campus']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                           <select  class="form-control createBtn  " name="department" id="department" onchange="getProgram(this.value)">
+                                <option value="0">Choose Department</option>
+                           </select>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                          <select  class="form-control createBtn  " name="program" id="program" onchange="getSemester(this.value)">
+                             <option value="0">Choose Program</option>
+                           </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                          <select  class="form-control createBtn " name="semester" id="semester" onchange="(this.value)">
+                             <option value="0">Choose Semester</option>
+                           </select>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                         <div class="input-group">
+                            <div class="custom-file">
+                             <input class="form-control createBtn" type="text" id="regNo" name="regNo" required placeholder="Student Registration Number">
+                           </div>
+                         </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                          <input class="form-control createBtn" type="email" name="email" required  placeholder="Email Address" id="stdEmail">
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                         <input class="form-control createBtn" type="number" name="contact"   placeholder="Contact Number" id="stdContact">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                         <textarea type="text" class="form-control createBtn" name="address" placeholder="Address" rows="1"></textarea>
+                        </div>
+                    </div>
+                  </div>
+                  </div>
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="addStdnt" onclick="validateStd()"> Save</button>
+                  </div>
+                   </form>
+                </div>
+              </div>
+            </div>
+      <!-- MODAL ADD STUDENT END -->
 
-
-
-      <!-- MODAL EDIT USER START -->
+      <!-- MODAL EDIT STUDENT START -->
         <div class="modal fade" id="edituser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
               <div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content" id="editUserModalContent">
@@ -333,13 +379,22 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>
+<script src="<?php echo BASE_URL; ?>assets/dist/js/addjs.js"></script>
 <!-- DataTables -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables/jquery.dataTables.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<!-- Choosen -->
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/chosen.jquery.js" type="text/javascript"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/docsupport/init.js" type="text/javascript" charset="utf-8"></script>
 <script>
+$(".chosen-select").chosen({
+  no_results_text: "Oops, nothing found!"
+});
   $(function () {
     $("#example1").DataTable();
  });
+
 </script>
 </body>
 </html>

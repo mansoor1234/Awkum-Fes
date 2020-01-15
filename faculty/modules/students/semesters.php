@@ -65,9 +65,6 @@
                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                  Add Semester
                </button>
-               <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal2">
-                 Add Semester Semesters
-               </button>
               </div>
              </div>
             <!-- /.card -->

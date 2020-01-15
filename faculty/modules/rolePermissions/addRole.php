@@ -142,7 +142,7 @@
                                                 <input type="checkbox" name="userroleedit[]" value="1" class="UserRole custom-control-input" onchange="checkUncheck('UserRole','UserRole')" id="sw15"><label class="custom-control-label" for="sw15"></label></div></td>
 
                                                 <td><div class="custom-control custom-switch custom-switch-off-danger    custom-switch-on-success">
-                                                <input type="checkbox" name="userroleedit[]" value="1" class="UserRole custom-control-input" onchange="checkUncheck('UserRole','UserRole')" id="sw16"><label class="custom-control-label" for="sw16"></label></div></td>
+                                                <input type="checkbox" name="userroledelete[]" value="1" class="UserRole custom-control-input" onchange="checkUncheck('UserRole','UserRole')" id="sw16"><label class="custom-control-label" for="sw16"></label></div></td>
                                             </tr>
                                         </tbody>
                                         </thead>

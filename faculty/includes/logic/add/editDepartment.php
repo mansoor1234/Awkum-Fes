@@ -10,9 +10,19 @@ if (isset($deptEdit)) {
 	$insert->bindParam(":dept_id",$dept_id);
 	$run=$insert->execute();
 	if($run){
+	   $count=count($programsEdit);
+	   $deleteExisting=mysqli_query($con,"DELETE FROM `dept_program` WHERE `dept_id`='$dept_id'");
+      for ($i=0; $i < $count; $i++) { 
+	  	$program=$programsEdit[$i];
+	  	$insertRel=$conn->prepare("INSERT INTO `dept_program` (`srno`, `dept_id`, `program_id`) VALUES (NULL, :dept, :prog)");
+	  	$insertRel->bindParam(":dept",$dept_id);
+	  	$insertRel->bindParam(":prog",$program);
+	  	$insertRel->execute();
+	  }
       header("Location:department.php?success_message=Department Edited Successfully");
 	}else{
 	  header("Location:department.php?error_message=Failed to edit department");	
 	}
 }
  ?>
+ 

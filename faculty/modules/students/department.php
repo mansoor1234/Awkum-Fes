@@ -8,11 +8,27 @@
 <?php include(INCLUDE_PATH.'/layouts/links.php');?> 
 <!-- DataTables -->
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/choosen/chosen.css">
 <style>
   td,th,tr{
     height: 35px;
     border: 1px solid #f4f6f9;
     padding-left: 11px;
+  }.chosen-container{
+    width: 100%!important;
+  }.chosen-search-input{
+    width: 147.125px;
+    height: 33px!important;
+    border-radius: 50%!important; 
+    border: none!important;
+  }.chosen-select{
+    width: 100%;
+  }.chosen-single{
+    height: 40px!important;
+  }.chosen-single span{
+    margin-top: 8px;
+  }.chosen-single div{
+    top:10px!important;
   }
 </style>
 </head>
@@ -60,11 +76,13 @@
                     <div class="alert has-icon text-center" role="alert" id="success_message" style="border:1px dashed #f3091e; color: red;background-color: white"><i class="fa fa-exclamation-triangle alert-icon"></i> <?php echo $_GET['error_message']; ?></div>
                     <?php endif; ?>
                   </div>
+                 </div>
+                   <div class="btn-group">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                          Add Department
+                        </button>
+                    </div>
               </div>
-               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                 Add Department
-               </button>
-             </div>
             <!-- /.card -->
          </div>
        </div>
@@ -141,7 +159,7 @@
 <?php include(INCLUDE_PATH.'/layouts/footer.php');?>
 </div>
 
-           <!-- MODAL ADD CAMPUS START -->
+           <!-- MODAL ADD DEPARTMENT START -->
              <div class="modal fade" id="myModal">
               <div class="modal-dialog modal-md">
                 <div class="modal-content">
@@ -166,7 +184,7 @@
                       <div class="row">
                         <div class="col-lg-8  col-sm-12 offset-2 mb-2">
                             <div class="form-group">
-                              <select  class="form-control createBtn  chosen-select" name="campus" id="campus">
+                              <select data-placeholder="Choose Campus (Single Selection)"  class="form-control createBtn chosen-select" name="campus" required id="campus">
                                 <?php $query=mysqli_query($con,"select * from campus"); ?>
                                 <option value="0">Choose Campus</option>
                                 <?php while($rows=mysqli_fetch_array($query)){ ?>
@@ -176,20 +194,33 @@
                             </div>
                         </div>
                        </div>
+                       <div class="row">
+                        <div class="col-lg-8  col-sm-12 offset-2 mb-2">
+                            <div class="form-group">
+                              <select data-placeholder="Choose Program (Multiple Selection)"  class="form-control createBtn chosen-select" name="programs[]" multiple id="programs" required>
+                                <?php $query=mysqli_query($con,"select * from programs"); ?>
+                                <option value="0">Choose Program</option>
+                                <?php while($rows=mysqli_fetch_array($query)){ ?>
+                                <option value="<?php echo $rows['srno']; ?>"><?php echo $rows['program']; ?></option>
+                                <?php } ?>
+                               </select>
+                            </div>
+                        </div>
+                       </div>
                   </div>
                   <!-- Modal footer -->
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="addCampus" onclick="viladateProduct()"> Save</button>
+                    <button type="submit" class="btn btn-primary" name="addCampus" value="set" > Save</button>
                   </div>
                    </form>
                 </div>
               </div>
             </div>
             
-          <!-- MODAL ADD CAMPUS END -->
-
-      <!-- MODAL ADD CAMPUS START -->
+          <!-- MODAL ADD DEPARTMENT END -->
+       
+          <!-- MODAL EDIT DEPARTMENT START -->
         <div class="modal fade" id="edituser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
               <div class="modal-dialog modal-md" role="document">
                   <div class="modal-content" id="editUserModalContent">
@@ -209,7 +240,7 @@
              </div>
          </div>
      </div> 
-      <!-- MODAL ADD CAMPUS END -->
+      <!-- MODAL EDIT DEPARTMENT END -->
        
 <!-- jQuery -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery/jquery.min.js"></script>
@@ -250,10 +281,22 @@
 <!-- DataTables -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables/jquery.dataTables.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<!-- Choosen -->
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/chosen.jquery.js" type="text/javascript"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/docsupport/prism.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo BASE_URL; ?>assets/plugins/choosen/docsupport/init.js" type="text/javascript" charset="utf-8"></script>
 <script>
+$(".chosen-select").chosen({
+  no_results_text: "Oops, nothing found!"
+});
+  $(".chosen-container").click(function(){ 
+    $("input").removeAttr("checked","checked");
+    $(this).parent("div").find("div.custom-control.custom-radio .enable-disable-btn").attr("checked","checked");
+ })
   $(function () {
     $("#example1").DataTable();
  });
+
 </script>
 </body>
 </html>
