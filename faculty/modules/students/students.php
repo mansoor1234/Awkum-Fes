@@ -266,11 +266,23 @@
                         </div>
                     </div>
                   </div>
+                   <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                         <input class="form-control createBtn" type="password" name="pass"   placeholder="Password" id="pass" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                         <input class="form-control createBtn" type="password" name="cpass"   placeholder="Confirm Password" id="cpass" required onkeyup="checkPass(this.value)">
+                        </div>
+                    </div>
+                  </div>
                   </div>
                   <!-- Modal footer -->
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="addStdnt" onclick="validateStd()"> Save</button>
+                    <button type="submit" class="btn btn-primary" id="stdSave" name="addStdnt" onclick="validateStd()"> Save</button>
                   </div>
                    </form>
                 </div>
@@ -394,7 +406,18 @@ $(".chosen-select").chosen({
   $(function () {
     $("#example1").DataTable();
  });
-
+function checkPass(cpass){
+var pass=$("#pass").val();
+if(pass===cpass){
+$("#pass").css("border","1px solid green");
+$("#cpass").css("border","1px solid green");
+$("#stdSave").removeAttr("disabled","disabled");
+}else if(pass!=cpass){
+$("#pass").css("border","1px solid red");
+$("#cpass").css("border","1px solid red");
+$("#stdSave").attr("disabled","disabled");  
+}
+}
 </script>
 </body>
 </html>

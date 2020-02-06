@@ -1,4 +1,4 @@
-function campusEdit(campusID)
+  function campusEdit(campusID)
 {
  $.ajax(
   {
@@ -55,16 +55,43 @@ function campusEdit(campusID)
  } 
  });
 }
-
+function courseEdit(courseID)
+{
+ $.ajax(
+  {
+   url:"../../ajax/add/course.php",
+   method:"post",
+   data:{courseID:courseID},
+   success:function(result){
+   $("#modal_content").html(result);
+ } 
+ });
+}function facultyEdit(facultyID)
+{
+ $.ajax(
+  {
+   url:"../../ajax/add/faculty.php",
+   method:"post",
+   data:{facultyID:facultyID},
+   success:function(result){
+   $("#modal_content").html(result);
+ } 
+ });
+}
 // STUDENT PAGE
  function getDepartment(campus){
+  // alert("asd");
  $.ajax(
   {
    url:"../../ajax/add/department.php",
    method:"post",
    data:{campusID:campus},
    success:function(result){
-   $("#department").html(result);
+   $('#department')
+    .empty()
+    .append(result)
+;
+;
  } 
  });
  } function getProgram(dept){
@@ -74,7 +101,9 @@ function campusEdit(campusID)
    method:"post",
    data:{DeptID:dept},
    success:function(result){
-   $("#program").html(result);
+   $('#program')
+    .empty()
+    .append(result)
  } 
  });
  }function getSemester(prog){
@@ -84,7 +113,22 @@ function campusEdit(campusID)
    method:"post",
    data:{ProgID:prog},
    success:function(result){
-   $("#semester").html(result);
+   $('#semester')
+    .empty()
+    .append(result)
+ } 
+ });
+ }function getCourse(semesterID){
+
+ $.ajax(
+  {
+   url:"../../ajax/add/course.php",
+   method:"post",
+   data:{semesterID:semesterID},
+   success:function(result){
+   $('#course')
+    .empty()
+    .append(result)
  } 
  });
  }function validateStd(){

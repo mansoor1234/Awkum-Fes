@@ -1,5 +1,6 @@
 <?php include('../../config.php');?>
-<?php include(INCLUDE_PATH . '/logic/add/addStudents.php'); ?>
+<?php include(INCLUDE_PATH . '/logic/add/addFaculty.php'); ?>
+<?php include(INCLUDE_PATH . '/logic/add/editFaculty.php'); ?>
 <?php  loginCheck(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,14 +99,11 @@
                 <tr>
                   <th>S.NO</th>
                   <th>Name</th>
-                  <th>Father Name</th>
+                  <th>Designation</th>
                   <th>Campus</th>
                   <th>Dept</th>
                   <th>Program</th>
                   <th>Semester</th>
-                  <th>Reg.NO</th>
-                  <th>Email</th>
-                  <th>Contact</th>
                   <th>Actions</th>
                 </tr>
                 </thead>
@@ -114,41 +112,35 @@
                                          
                     $c=1;
                     $userID=$_SESSION['user']['User'];
-                    $get_users=mysqli_query($con,"SELECT students.srno as STID,students.name,students.f_name,students.email,students.contact,students.reg_no,campus.campus,department.dept_name,programs.program,semester.semester FROM students LEFT JOIN campus ON students.campus_id = campus.srno LEFT JOIN department ON students.department_id = department.srno LEFT JOIN programs ON students.program_id = programs.srno LEFT JOIN semester ON students.semester_id = semester.srno");
+                    $get_users=mysqli_query($con,"SELECT faculty.srno as FID,faculty.name,designation,campus.campus,department.dept_name,programs.program,semester.semester FROM faculty LEFT JOIN campus ON faculty.campus_id = campus.srno LEFT JOIN department ON faculty.department_id = department.srno LEFT JOIN programs ON faculty.program_id = programs.srno LEFT JOIN semester ON faculty.semester_id = semester.srno");
                     while($rows=mysqli_fetch_array($get_users)){
                     ?>
                 <tr>
                     <td><?php  echo $c++;?></td>
                     <td><?php  echo $rows['name'];?></td>
-                    <td><?php  echo $rows['f_name'];?></td>
+                    <td><?php  echo $rows['designation'];?></td>
                     <td><?php  echo $rows['campus'];?></td>
                     <td><?php  echo $rows['dept_name'];?></td>
                     <td><?php  echo $rows['program'];?></td>
                     <td><?php  echo $rows['semester'];?></td>
-                    <td><?php  echo $rows['reg_no'];?></td>
-                    <td><?php  echo $rows['email'];?></td>
-                    <td><?php  echo $rows['contact'];?></td>
                     <td>
                       <div class="btn-group">
-                    <button class="btn btn-primary btn-sm editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['STID'];?>" onclick="userEdit(this.value)" id="editBtn"> Edit
+                    <button class="btn btn-primary btn-sm editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['FID'];?>" onclick="facultyEdit(this.value)" id="editBtn"> Edit
                     </button>
-                    <button class="btn btn-danger btn-sm editBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['STID'];?>"  id="deleteBtn">Delete
+                    <button class="btn btn-danger btn-sm editBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['FID'];?>"  id="deleteBtn">Delete
                     </button></div></td>
                 </tr>
                 <?php }?>
                </tbody>
                 <tfoot>
                 <tr>
-                  <th>S.NO</th>
+                   <th>S.NO</th>
                   <th>Name</th>
-                  <th>Father Name</th>
+                  <th>Designation</th>
                   <th>Campus</th>
                   <th>Dept</th>
                   <th>Program</th>
                   <th>Semester</th>
-                  <th>Reg.NO</th>
-                  <th>Email</th>
-                  <th>Contact</th>
                   <th>Actions</th>
                 </tr>
                 </tfoot>
@@ -183,7 +175,7 @@
                 
                   <!-- Modal Header -->
                   <div class="modal-header">
-                    <h4 class="modal-title">Add Student </h4>
+                    <h4 class="modal-title">Add Faculty </h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                   </div>
                   
@@ -205,7 +197,7 @@
                   <div class="row">
                     <div class="col-lg-6 col-sm-12 mb-2">
                         <div class="form-group">
-                            <select  class="form-control createBtn chosen-select" name="campus" id="campus" onchange="getDepartment(this.value)">
+                            <select  class="form-control createBtn " name="campus" id="campus" onchange="getDepartment(this.value)">
                                 <?php $query=mysqli_query($con,"select * from campus"); ?>
                                 <option value="0">Choose Campus</option>
                                 <?php while($rows=mysqli_fetch_array($query)){ ?>
@@ -216,7 +208,7 @@
                     </div>
                     <div class="col-lg-6 col-sm-12 mb-2">
                         <div class="form-group">
-                           <select  class="form-control createBtn chosen-select " name="department" id="department" onchange="getProgram(this.value)">
+                           <select  class="form-control createBtn " name="department" id="department" onchange="getProgram(this.value)">
                                 <option value="0">Choose Department</option>
                            </select>
                         </div>
@@ -232,25 +224,20 @@
                     </div>
                     <div class="col-lg-6 col-sm-12 mb-2">
                         <div class="form-group">
-                          <select  class="form-control createBtn " name="semester" id="semester" onchange="(this.value)">
+                          <select  class="form-control createBtn " name="semester" id="semester" onchange="getCourse(this.value)">
                              <option value="0">Choose Semester</option>
                            </select>
                         </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-lg-6 col-sm-12 mb-2">
+                    <div class="col-lg-6 col-sm-12 mb-2 offset-3">
                         <div class="form-group">
-                         <div class="input-group">
-                            <div class="custom-file">
-                             <input class="form-control createBtn" type="text" id="regNo" name="regNo" required placeholder="Student Registration Number">
-                           </div>
-                         </div>
+                          <div class="form-group">
+                          <select  class="form-control createBtn  " name="course" id="course" >
+                             <option value="0">Choose Course</option>
+                           </select>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 mb-2">
-                        <div class="form-group">
-                          <input class="form-control createBtn" type="email" name="email" required  placeholder="Email Address" id="stdEmail">
                         </div>
                     </div>
                   </div>
@@ -258,7 +245,7 @@
                   <!-- Modal footer -->
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="addStdnt" onclick="validateStd()"> Save</button>
+                    <button type="submit" class="btn btn-primary" name="addFacilty" onclick="validateStd()"> Save</button>
                   </div>
                    </form>
                 </div>
@@ -266,72 +253,28 @@
             </div>
       <!-- MODAL ADD STUDENT END -->
 
-      <!-- MODAL EDIT STUDENT START -->
+         <!-- MODAL ADD PROGRAM START -->
         <div class="modal fade" id="edituser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-              <div class="modal-dialog modal-lg" role="document">
-                  <div class="modal-content" id="editUserModalContent">
+              <div class="modal-dialog modal-md" role="document">
+                  <div class="modal-content" >
                      <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Edit User</h5><button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                      <h5 class="modal-title" id="exampleModalLongTitle">Edit Program</h5><button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                       </div>
                       <div class="modal-body">
-                    <form action="" method="post" enctype="multipart/form-data" id="editUserForm">
-                  <div id="modal_content"></div>
-                    </div>
+                    <form action="" method="post" enctype="multipart/form-data" id="editProgForm">
+                   <div id="modal_content"></div>
+                  </div>
                   <div class="modal-footer">
                       <button class="btn btn-light" type="button" data-dismiss="modal">Close</button>
-                        <button class="btn btn-light" type="reset" onclick="clearEditFormData()">Clear
+                         <input  class="btn btn-primary mr-2" type="submit"  name="facultyEdit"  value="Save Changes" >
                         </button>
-                         <input  class="btn btn-primary mr-2" type="submit" id="submit_edit_btn" name="user_edit_form" onclick="editUser(this.value)" value="Save Changes">
-                        <button class="btn btn-primary"
-                         type="button" disabled id="saved_edit_btn" style="display: none;"></span>Saved
-                    </button>
-                    <div id="target1">
-                  </div>
-                     <button class="btn btn-primary" type="button" disabled id="loading_edit_btn" style="display: none;">
-                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Processing...<div id="target">
-                        </div>
-                       </button>
                      </div>
                   </form>
              </div>
          </div>
      </div> 
-      <!-- MODAL EDIT USER END -->
-       <!-- MODAL CHANGE IMAGE START -->
-       <div class="modal fade" id="changeImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-              <div class="modal-dialog " role="document">
-                 <div class="modal-content" id="editUserModalContent">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Change Image</h5>
-                       <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                     </div>
-                     <div class="modal-body">
-                        <div class='card'>
-                           <div class='card-body'>
-                            <h5 class='box-title text-primary'>Change Image</h5>
-                            <div id="target3"></div>
-                          <form  method="post" enctype="multipart/form-data" 
-                         id="imageChangeForm">
-                       <div id="imageUploadContent"></div>
-                     <input type='file' id="imgInp" name="imageFile" />
-                       <center><img id="blah"  src="#" alt="your image" style="display: none;" /></center>
-                        <div class="modal-footer">
-                          <button class="btn btn-light" type="reset" onclick="">Clear
-                           </button>
-                         <input  class="btn btn-primary mr-2" type="submit" id="submit_change_image_btn" name="user_change_image_form" onclick="saveImage(this.value)" value="Save Changes">
-                       <button class="btn btn-primary" type="button" disabled id="loading_change_image_btn" style="display: none;">
-                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Processing...<div id="target">
-                      </div>
-                        </button>
-                       </div>
-                     </form>
-                  </div>
-                </div>
-               </div>
-             </div>
-         </div>
-     </div> 
-      <!-- MODAL CHANGE IMAGE END -->
+      <!-- MODAL ADD PROGRAM END -->
+      
 <!-- jQuery -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->

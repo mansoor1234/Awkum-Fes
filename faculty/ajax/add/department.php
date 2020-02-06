@@ -83,5 +83,3 @@ if (isset($_POST['campusID'])) {
                 no_results_text: "Oops, nothing found!"
               });
             </script>
-          <!--    $query3=mysqli_query($con,"
-              SELECT programs.srno,programs.program FROM department INNER JOIN dept_program ON department.srno = dept_program.dept_id INNER JOIN programs ON programs.srno = dept_program.program_id WHERE dept_id='$deptID'"); -->

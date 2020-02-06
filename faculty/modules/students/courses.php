@@ -65,9 +65,6 @@
                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                  Add Courses
                </button>
-               <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal2">
-                 Add Courses Semesters
-               </button>
               </div>
              </div>
             <!-- /.card -->
@@ -104,7 +101,7 @@
                     <td><?php  echo $rows['course_name'];?></td>
                     <td><?php  echo $rows['course_code'];?></td>
                    <td>
-                    <button class="btn btn-primary btn-xs editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['srno'];?>" onclick="semEdit(this.value)" id="editBtn">Edit
+                    <button class="btn btn-primary btn-xs editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['srno'];?>" onclick="courseEdit(this.value)" id="editBtn">Edit
                     </button>
                     <button class="btn btn-danger btn-xs deleteBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['srno'];?>"  id="deleteBtn">Delete
                     </button></td>
@@ -158,7 +155,7 @@
                   
                   <!-- Modal body -->
                   <div class="modal-body">
-                    <form method="POST" id="addCampusForm">
+                    <form method="POST" id="">
                        <div class="row">
                         <div class="col-lg-8  col-sm-12 offset-2 mb-2">
                             <div id="output"></div>
@@ -175,6 +172,42 @@
                             </div>
                         </div>
                       </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                            <select  class="form-control createBtn " name="campus" id="campus" onchange="getDepartment(this.value)">
+                                <?php $query=mysqli_query($con,"select * from campus"); ?>
+                                <option value="0">Choose Campus</option>
+                                <?php while($rows=mysqli_fetch_array($query)){ ?>
+                                <option value="<?php echo $rows['srno']; ?>"><?php echo $rows['campus']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                           <select  class="form-control createBtn " name="department" id="department" onchange="getProgram(this.value)">
+                                <option value="0">Choose Department</option>
+                           </select>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                          <select  class="form-control createBtn  " name="program" id="program" onchange="getSemester(this.value)">
+                             <option value="0">Choose Program</option>
+                           </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 mb-2">
+                        <div class="form-group">
+                          <select  class="form-control createBtn " name="semester" id="semester" >
+                             <option value="0">Choose Semester</option>
+                           </select>
+                        </div>
+                    </div>
+                  </div>
                   </div>
                   <!-- Modal footer -->
                   <div class="modal-footer">
@@ -201,7 +234,7 @@
                   </div>
                   <div class="modal-footer">
                       <button class="btn btn-light" type="button" data-dismiss="modal">Close</button>
-                         <input  class="btn btn-primary mr-2" type="submit" id="" name="prog_edit"  value="Save Changes" >
+                         <input  class="btn btn-primary mr-2" type="submit"  name="courseEdit"  value="Save Changes" >
                         </button>
                      </div>
                   </form>
@@ -209,47 +242,7 @@
          </div>
      </div> 
       <!-- MODAL ADD PROGRAM END -->
-     <!-- MODAL ADD PROGRAM+SEMSTER START -->
-             <div class="modal fade" id="myModal2">
-              <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                
-                  <!-- Modal Header -->
-                  <div class="modal-header">
-                    <h4 class="modal-title">Add Program Semesters </h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  </div>
-                  
-                  <!-- Modal body -->
-                  <div class="modal-body">
-                    <form method="POST" id="addCampusForm">
-                       <div class="row">
-                        <div class="col-lg-8  col-sm-12 offset-2 mb-2">
-                            <div id="output"></div>
-                            <div class="form-group">
-                             <input class="form-control createBtn" type="text" id="program" name="program" required placeholder="Program Name" onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
-                            </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-8  col-sm-12 offset-2 mb-2">
-                            <div class="form-group">
-                             <input class="form-control createBtn" type="text" id="program" name="program" required placeholder="Program Name" onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="addProgram" onclick="viladateProduct()"> Save</button>
-                  </div>
-                   </form>
-                </div>
-              </div>
-            </div>
-            
-          <!-- MODAL ADD PROGRAM+SEMSTER END -->  
+    
 <!-- jQuery -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -296,6 +289,7 @@
   $(function () {
     $("#example2").DataTable();
  });
+
 </script>
 </body>
 </html>
