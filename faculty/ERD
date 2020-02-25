@@ -1,0 +1,148 @@
+CREATE TABLE `form` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `campus_id` int,
+  `department_id` int,
+  `program_id` int,
+  `semester_id` int,
+  `student_id` int,
+  `faculty_id` int,
+  `course_id` int,
+  `q1` int,
+  `q2` int,
+  `q3` int,
+  `q4` int,
+  `q5` int,
+  `q6` int,
+  `q7` int,
+  `q8` int,
+  `q9` int,
+  `q10` int,
+  `q11` int,
+  `q12` int,
+  `q13` int,
+  `q14` int,
+  `q15` int,
+  `q16` int,
+  `sum` int,
+  `created_at` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`campus_id`, `department_id`, `program_id`, `semester_id`, `student_id`, `faculty_id`, `course_id`)
+);
+
+CREATE TABLE `students` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `campus_id` int,
+  `program_id` int,
+  `department_id` int,
+  `semester_id` int,
+  `reg_no` int,
+  `name` varchar(50),
+  `f_name` varchar(50),
+  `email` varchar(100),
+  `created_at` datetime,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`campus_id`, `program_id`, `department_id`, `semester_id`)
+);
+
+CREATE TABLE `student_courses` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `student_id` int,
+  `course_id` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`student_id`, `course_id`)
+);
+
+CREATE TABLE `course` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `course_name` varchar(50),
+  `course_code` varchar(50),
+  `created_at` datetime,
+  PRIMARY KEY (`srno`)
+);
+
+CREATE TABLE `department` (
+ `srno` int NOT NULL AUTO_INCREMENT,
+  `campus_id` int,
+  `dept_name` varchar(100),
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`campus_id`)
+);
+
+CREATE TABLE `campus` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `campus` varchar(100),
+  `city` varchar(30),
+  `created_at` datetime,
+  PRIMARY KEY (`srno`)
+);
+
+CREATE TABLE `faculty` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100),
+  `designation` varchar(50),
+  `created_by` int,
+  `created_at` datetime,
+  PRIMARY KEY (`srno`)
+);
+
+CREATE TABLE `semester` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `semester` varchar(30),
+  `created_at` datetime,
+  PRIMARY KEY (`srno`)
+);
+
+CREATE TABLE `course_semester` (
+  `srno` int,
+  `sem_id` int,
+  `course_id` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`sem_id`, `course_id`)
+);
+
+CREATE TABLE `faculty_semester` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `faculty_id` int,
+  `semester_id` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`faculty_id`, `semester_id`)
+);
+
+CREATE TABLE `faculty_department` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `faculty_id` int,
+  `department_id` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`faculty_id`, `department_id`)
+);
+
+CREATE TABLE `programs` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `program` varchar(30),
+  `created_at` datetime,
+  PRIMARY KEY (`srno`)
+);
+
+CREATE TABLE `program_course` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `program_id` int,
+  `course_id` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`program_id`, `course_id`)
+);
+
+CREATE TABLE `program_semester` (
+  `srno` int NOT NULL AUTO_INCREMENT,
+  `program_id` int,
+  `semester_id` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`program_id`, `semester_id`)
+);
+
+CREATE TABLE `dept_program` (
+ `srno` int NOT NULL AUTO_INCREMENT,
+  `dept_id` int,
+  `program_id` int,
+  PRIMARY KEY (`srno`),
+  KEY `FK` (`dept_id`, `program_id`)
+);
