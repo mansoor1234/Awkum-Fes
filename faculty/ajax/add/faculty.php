@@ -29,7 +29,7 @@ extract($rows);
                     </div>
                     <div class="col-lg-6 col-sm-12 mb-2">
                         <div class="form-group">
-                         <input class="form-control createBtn" type="text" placeholder="Designation" value="<?php echo $designation; ?>" name="designation" id="designation" required onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
+                         <input class="form-control createBtn" type="text" placeholder="Designation" value="<?php echo $designation; ?>" name="designationEdit" id="designation" required onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
                         </div>
                     </div>
                   </div>
@@ -48,7 +48,7 @@ extract($rows);
                     </div>
                     <div class="col-lg-6 col-sm-12 mb-2">
                         <div class="form-group">
-                           <select  class="form-control createBtn " name="department" id="department2" onchange="getProgram(this.value)">
+                           <select  class="form-control createBtn " name="departmentEdit" id="department2" onchange="getProgram(this.value)">
                                 <option value="<?php echo $did; ?>"><?php echo $dept_name; ?></option>
                                 <option value="0">Choose Department</option>
                                 <?php $query=mysqli_query($con,"select * from department where campus_id='$campid'"); ?>

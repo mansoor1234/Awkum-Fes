@@ -66,7 +66,8 @@ extract($rows);
 <?php 
 if (isset($_POST['campusID'])) {
   $campusID=$_POST['campusID'];
-  $get_dept_data=$conn->prepare("SELECT department.srno,department.dept_name FROM department INNER JOIN campus ON campus.srno=department.campus_id where department.campus_id=:campusID");
+  $get_dept_data=$conn->prepare("SELECT department.srno,department.dept_name FROM department 
+    INNER JOIN campus ON campus.srno=department.campus_id where department.campus_id=:campusID");
   $get_dept_data->bindParam(":campusID",$campusID);
   $get_dept_data->execute();
   $rows1=$get_dept_data->fetchAll(PDO::FETCH_ASSOC);

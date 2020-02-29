@@ -1,6 +1,7 @@
 <?php include('../../config.php');?>
 <?php include(INCLUDE_PATH . '/logic/add/addCampus.php'); ?>
 <?php include(INCLUDE_PATH . '/logic/add/editCampus.php'); ?>
+<?php include(INCLUDE_PATH . '/logic/add/delete.php'); ?>
 <?php  loginCheck(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,10 +108,12 @@
                     <td><?php  echo $rows['city'];?></td>
                     <td><?php  echo $rows['address'];?></td>
                    <td>
+                    <form method="POST">
+                    <div class="btn-group">
                     <button class="btn btn-primary btn-xs editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['srno'];?>" onclick="campusEdit(this.value)" id="editBtn">Edit
                     </button>
-                    <button class="btn btn-danger btn-xs deleteBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['srno'];?>"  id="deleteBtn">Delete
-                    </button></td>
+                    <button type="submit" name="deleteCampus" class="btn btn-danger btn-xs deleteBtn" value="<?php echo $rows['srno'];?>"  id="deleteBtn" onclick="return confirm('Are you sure?')">Delete
+                    </button></div></form></td>
                 </tr>
                 <?php }?>
                </tbody>
@@ -232,9 +235,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -248,8 +248,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo BASE_URL; ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>

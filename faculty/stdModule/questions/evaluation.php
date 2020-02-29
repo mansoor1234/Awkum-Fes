@@ -1,5 +1,6 @@
 
-<?php include('../../config.php');?>
+<?php include('../config.php');?>
+
 <?php 
 
 if (isset($_SESSION['stdID']) && isset($_SESSION['stdREG'])) {
@@ -44,19 +45,45 @@ if(isset($submitForm)){
  $insert->bindParam(":datetime1",$dateTime);
  $run=$insert->execute();
  if($run){
- $_SESSION['success2']="Success";
+ $_SESSION['success2']="Form has been submited successfully.";
  }else{
- $_SESSION['error2']="Failed"; 
+ $_SESSION['error2']="Please attempt all questions."; 
  }
 }
 ?>
-<?php  loginCheck(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<?php include(INCLUDE_PATH.'/layouts/links.php');?> 
+<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Faculty Evaluation System</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/plugins/summernote/summernote-bs4.css">
+  <link rel="stylesheet"  href="<?php echo BASE_URL; ?>/assets/dist/css/custom.css">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 <!-- DataTables -->
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/plugins/toastr/toastr.min.css">
 <style>
   td,th,tr{
     height: 35px;
@@ -86,7 +113,7 @@ if(isset($submitForm)){
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item active"><?php echo $_SESSION['stdNAME']; ?></li>
               <li class="breadcrumb-item active"><?php echo $_SESSION['stdREG']; ?></li>
-              <li class="breadcrumb-item active"><a href="<?php echo BASE_URL; ?>index2.php">Logout</a></li>
+              <li class="breadcrumb-item active"><a href="../studentLogin/logout.php">Logout</a></li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -113,7 +140,7 @@ if(isset($submitForm)){
    $eval2=mysqli_query($con,"select * from evaluation where student_id=".$_SESSION['stdID']."");
    $count4=mysqli_num_rows($eval2);
    $progress=$count4*100/$count1;
-   // $progress=11;
+   $progress=round($progress);
    $progress2=$progress.'%';
    if($progress<50){
    echo " <div class='progress '>
@@ -131,6 +158,8 @@ if(isset($submitForm)){
                   </div>
                 </div><center><span >$progress2 Complete</span></center>";
   }if($progress==100){
+    $stID=$_SESSION['stdID'];
+   $updateStatus=mysqli_query($con,"UPDATE `students` SET  status='0' WHERE srno='$stID'");
    header("Location:../studentLogin/logout.php");
   }
   while ($rows2=mysqli_fetch_array($faculty)) {
@@ -161,7 +190,7 @@ if(isset($submitForm)){
                                     <div class="alert alert-danger has-icon" role="alert" id="error_message"><i class="fa fa-exclamation-triangle alert-icon"></i> <?php echo $_SESSION['error2']; ?></div>
                                     <?php endif; ?>
                                     <?php unset($_SESSION['error2']); ?> 
-                                    <form method="POST" id="addRoleForm" >
+                                    <form method="POST" id="evaluation" >
                                     <table class="table table-bordered">
                                     <thead class="thead-light">
                                             <tr>
@@ -205,35 +234,35 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q1" id="radioSuccess1" value="1">
+                                                       <input type="radio" onchange="validate()" name="q1" id="radioSuccess1" value="1">
                                                        <label for="radioSuccess1">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q1" id="radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q1" id="radioSuccess2" value="2">
                                                        <label for="radioSuccess2">
                                                         Disagree
                                                        </label>
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q1" id="radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q1" id="radioSuccess3" value="3">
                                                        <label for="radioSuccess3">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q1" id="radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q1" id="radioSuccess4" value="4">
                                                        <label for="radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q1" id="321radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q1" id="321radioSuccess5" value="5">
                                                        <label for="321radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -245,14 +274,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q2" id="radioSuccess5" value="1">
+                                                       <input type="radio" onchange="validate()" name="q2" id="radioSuccess5" value="1">
                                                        <label for="radioSuccess5">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q2" id="radioSuccess6" value="2">
+                                                      <input type="radio" onchange="validate()" name="q2" id="radioSuccess6" value="2">
                                                        <label for="radioSuccess6">
                                                         
                                                         Disagree
@@ -260,21 +289,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q2" id="radioSuccess7" value="3">
+                                                       <input type="radio" onchange="validate()" name="q2" id="radioSuccess7" value="3">
                                                        <label for="radioSuccess7">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q2" id="radioSuccess8" value="4">
+                                                       <input type="radio" onchange="validate()" name="q2" id="radioSuccess8" value="4">
                                                        <label for="radioSuccess8">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q2" id="radioSuccess9" value="5">
+                                                       <input type="radio" onchange="validate()" name="q2" id="radioSuccess9" value="5">
                                                        <label for="radioSuccess9">
                                                         Strongly Agree
                                                        </label>
@@ -286,14 +315,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q3" id="radioSuccess11" value="1">
+                                                       <input type="radio" onchange="validate()" name="q3" id="radioSuccess11" value="1">
                                                        <label for="radioSuccess11">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q3" id="radioSuccess22" value="2">
+                                                      <input type="radio" onchange="validate()" name="q3" id="radioSuccess22" value="2">
                                                        <label for="radioSuccess22">
                                                         
                                                         Disagree
@@ -301,21 +330,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q3" id="radioSuccess33" value="3">
+                                                       <input type="radio" onchange="validate()" name="q3" id="radioSuccess33" value="3">
                                                        <label for="radioSuccess33">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q3" id="radioSuccess44" value="4">
+                                                       <input type="radio" onchange="validate()" name="q3" id="radioSuccess44" value="4">
                                                        <label for="radioSuccess44">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q3" id="radioSuccess55" value="5">
+                                                       <input type="radio" onchange="validate()" name="q3" id="radioSuccess55" value="5">
                                                        <label for="radioSuccess55">
                                                         Strongly Agree
                                                        </label>
@@ -327,14 +356,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q4" id="radioSuccess16" value="1">
+                                                       <input type="radio" onchange="validate()" name="q4" id="radioSuccess16" value="1">
                                                        <label for="radioSuccess16">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q4" id="radioSuccess27" value="2">
+                                                      <input type="radio" onchange="validate()" name="q4" id="radioSuccess27" value="2">
                                                        <label for="radioSuccess27">
                                                         
                                                         Disagree
@@ -342,21 +371,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q4" id="radioSuccess38" value="3">
+                                                       <input type="radio" onchange="validate()" name="q4" id="radioSuccess38" value="3">
                                                        <label for="radioSuccess38">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q4" id="radioSuccess49" value="4">
+                                                       <input type="radio" onchange="validate()" name="q4" id="radioSuccess49" value="4">
                                                        <label for="radioSuccess49">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q4" id="radioSuccess511" value="5">
+                                                       <input type="radio" onchange="validate()" name="q4" id="radioSuccess511" value="5">
                                                        <label for="radioSuccess511">
                                                         Strongly Agree
                                                        </label>
@@ -368,14 +397,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q5" id="radioSuccess122" value="1">
+                                                       <input type="radio" onchange="validate()" name="q5" id="radioSuccess122" value="1">
                                                        <label for="radioSuccess122">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q5" id="radioSuccess233" value="2">
+                                                      <input type="radio" onchange="validate()" name="q5" id="radioSuccess233" value="2">
                                                        <label for="radioSuccess233">
                                                         
                                                         Disagree
@@ -383,21 +412,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q5" id="radioSuccess344" value="3">
+                                                       <input type="radio" onchange="validate()" name="q5" id="radioSuccess344" value="3">
                                                        <label for="radioSuccess344">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q5" id="radioSuccess455" value="4">
+                                                       <input type="radio" onchange="validate()" name="q5" id="radioSuccess455" value="4">
                                                        <label for="radioSuccess455">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q5" id="radioSuccess566" value="5">
+                                                       <input type="radio" onchange="validate()" name="q5" id="radioSuccess566" value="5">
                                                        <label for="radioSuccess566">
                                                         Strongly Agree
                                                        </label>
@@ -410,14 +439,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q6" id="radioSuccess177" value="1">
+                                                       <input type="radio" onchange="validate()" name="q6" id="radioSuccess177" value="1">
                                                        <label for="radioSuccess177">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q6" id="radioSuccess288" value="2">
+                                                      <input type="radio" onchange="validate()" name="q6" id="radioSuccess288" value="2">
                                                        <label for="radioSuccess288">
                                                         
                                                         Disagree
@@ -425,21 +454,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q6" id="radioSuccess399" value="3">
+                                                       <input type="radio" onchange="validate()" name="q6" id="radioSuccess399" value="3">
                                                        <label for="radioSuccess399">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q6" id="radioSuccess4111" value="4">
+                                                       <input type="radio" onchange="validate()" name="q6" id="radioSuccess4111" value="4">
                                                        <label for="radioSuccess4111">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q6" id="radioSuccess5222" value="5">
+                                                       <input type="radio" onchange="validate()" name="q6" id="radioSuccess5222" value="5">
                                                        <label for="radioSuccess5222">
                                                         Strongly Agree
                                                        </label>
@@ -452,14 +481,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q7" id="radioSuccess1333" value="1">
+                                                       <input type="radio" onchange="validate()" name="q7" id="radioSuccess1333" value="1">
                                                        <label for="radioSuccess1333">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q7" id="radioSuccess2444" value="2">
+                                                      <input type="radio" onchange="validate()" name="q7" id="radioSuccess2444" value="2">
                                                        <label for="radioSuccess2444">
                                                         
                                                         Disagree
@@ -467,21 +496,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q7" id="radioSuccess3555" value="3">
+                                                       <input type="radio" onchange="validate()" name="q7" id="radioSuccess3555" value="3">
                                                        <label for="radioSuccess3555">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q7" id="radioSuccess4666" value="4">
+                                                       <input type="radio" onchange="validate()" name="q7" id="radioSuccess4666" value="4">
                                                        <label for="radioSuccess4666">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q7" id="radioSuccess5777" value="5">
+                                                       <input type="radio" onchange="validate()" name="q7" id="radioSuccess5777" value="5">
                                                        <label for="radioSuccess5777">
                                                         Strongly Agree
                                                        </label>
@@ -494,14 +523,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q8" id="radioSuccess1888" value="1">
+                                                       <input type="radio" onchange="validate()" name="q8" id="radioSuccess1888" value="1">
                                                        <label for="radioSuccess1888">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q8" id="radioSuccess2888" value="2">
+                                                      <input type="radio" onchange="validate()" name="q8" id="radioSuccess2888" value="2">
                                                        <label for="radioSuccess2888">
                                                         
                                                         Disagree
@@ -509,21 +538,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q8" id="radioSuccess3999" value="3">
+                                                       <input type="radio" onchange="validate()" name="q8" id="radioSuccess3999" value="3">
                                                        <label for="radioSuccess3999">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q8" id="radioSuccess41111" value="4">
+                                                       <input type="radio" onchange="validate()" name="q8" id="radioSuccess41111" value="4">
                                                        <label for="radioSuccess41111">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q8" id="radioSuccess511112" value="5">
+                                                       <input type="radio" onchange="validate()" name="q8" id="radioSuccess511112" value="5">
                                                        <label for="radioSuccess511112">
                                                         Strongly Agree
                                                        </label>
@@ -536,14 +565,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q9" id="radioSuccess12222" value="1">
+                                                       <input type="radio" onchange="validate()" name="q9" id="radioSuccess12222" value="1">
                                                        <label for="radioSuccess12222">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q9" id="radioSuccess23333" value="2">
+                                                      <input type="radio" onchange="validate()" name="q9" id="radioSuccess23333" value="2">
                                                        <label for="radioSuccess23333">
                                                         
                                                         Disagree
@@ -551,21 +580,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q9" id="radioSuccess34444" value="3">
+                                                       <input type="radio" onchange="validate()" name="q9" id="radioSuccess34444" value="3">
                                                        <label for="radioSuccess34444">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q9" id="radioSuccess45555" value="4">
+                                                       <input type="radio" onchange="validate()" name="q9" id="radioSuccess45555" value="4">
                                                        <label for="radioSuccess45555">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q9" id="radioSuccess56666" value="5">
+                                                       <input type="radio" onchange="validate()" name="q9" id="radioSuccess56666" value="5">
                                                        <label for="radioSuccess56666">
                                                         Strongly Agree
                                                        </label>
@@ -579,14 +608,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q10" id="1radioSuccess121" value="1">
+                                                       <input type="radio" onchange="validate()" name="q10" id="1radioSuccess121" value="1">
                                                        <label for="1radioSuccess121">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q10" id="2radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q10" id="2radioSuccess2" value="2">
                                                        <label for="2radioSuccess2">
                                                         
                                                         Disagree
@@ -594,21 +623,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q10" id="3radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q10" id="3radioSuccess3" value="3">
                                                        <label for="3radioSuccess3">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q10" id="4radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q10" id="4radioSuccess4" value="4">
                                                        <label for="4radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q10" id="5radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q10" id="5radioSuccess5" value="5">
                                                        <label for="5radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -621,21 +650,21 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q11" id="6radioSuccess1" value="1">
+                                                       <input type="radio" onchange="validate()" name="q11" id="6radioSuccess1" value="1">
                                                        <label for="6radioSuccess1">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q11" id="7radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q11" id="7radioSuccess2" value="2">
                                                        <label for="7radioSuccess2">
                                                         Disagree
                                                        </label>
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q11" id="8radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q11" id="8radioSuccess3" value="3">
                                                        <label for="8radioSuccess3">
                                                         Uncertain
                                                         
@@ -644,14 +673,14 @@ if(isset($submitForm)){
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q11" id="9radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q11" id="9radioSuccess4" value="4">
                                                        <label for="9radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q11" id="10radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q11" id="10radioSuccess5" value="5">
                                                        <label for="10radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -664,14 +693,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q12" id="11radioSuccess1" value="1">
+                                                       <input type="radio" onchange="validate()" name="q12" id="11radioSuccess1" value="1">
                                                        <label for="11radioSuccess1">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q12" id="12radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q12" id="12radioSuccess2" value="2">
                                                        <label for="12radioSuccess2">
                                                         
                                                         Disagree
@@ -679,21 +708,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q12" id="13radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q12" id="13radioSuccess3" value="3">
                                                        <label for="13radioSuccess3">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q12" id="14radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q12" id="14radioSuccess4" value="4">
                                                        <label for="14radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q12" id="15radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q12" id="15radioSuccess5" value="5">
                                                        <label for="15radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -706,14 +735,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q13" id="16radioSuccess1" value="1">
+                                                       <input type="radio" onchange="validate()" name="q13" id="16radioSuccess1" value="1">
                                                        <label for="16radioSuccess1">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q13" id="17radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q13" id="17radioSuccess2" value="2">
                                                        <label for="17radioSuccess2">
                                                         
                                                         Disagree
@@ -721,21 +750,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q13" id="18radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q13" id="18radioSuccess3" value="3">
                                                        <label for="18radioSuccess3">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q13" id="19radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q13" id="19radioSuccess4" value="4">
                                                        <label for="19radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q13" id="110radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q13" id="110radioSuccess5" value="5">
                                                        <label for="110radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -748,14 +777,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q14" id="111radioSuccess1" value="1">
+                                                       <input type="radio" onchange="validate()" name="q14" id="111radioSuccess1" value="1">
                                                        <label for="111radioSuccess1">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q14" id="112radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q14" id="112radioSuccess2" value="2">
                                                        <label for="112radioSuccess2">
                                                         
                                                         Disagree
@@ -763,21 +792,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q14" id="113radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q14" id="113radioSuccess3" value="3">
                                                        <label for="113radioSuccess3">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q14" id="114radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q14" id="114radioSuccess4" value="4">
                                                        <label for="114radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q14" id="115radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q14" id="115radioSuccess5" value="5">
                                                        <label for="115radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -790,14 +819,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q15" id="116radioSuccess1" value="1">
+                                                       <input type="radio" onchange="validate()" name="q15" id="116radioSuccess1" value="1">
                                                        <label for="116radioSuccess1">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q15" id="117radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q15" id="117radioSuccess2" value="2">
                                                        <label for="117radioSuccess2">
                                                         
                                                         Disagree
@@ -805,21 +834,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q15" id="118radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q15" id="118radioSuccess3" value="3">
                                                        <label for="118radioSuccess3">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q15" id="119radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q15" id="119radioSuccess4" value="4">
                                                        <label for="119radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q15" id="220radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q15" id="220radioSuccess5" value="5">
                                                        <label for="220radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -832,14 +861,14 @@ if(isset($submitForm)){
                                             </tr>
                                                 <tr>
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q16" id="221radioSuccess1" value="1">
+                                                       <input type="radio" onchange="validate()" name="q16" id="221radioSuccess1" value="1">
                                                        <label for="221radioSuccess1">
                                                         Strongly Disagree
                                                        </label>
                                                   </div></td>
                                                 </td>
                                                  <td><div class="icheck-success d-inline">
-                                                      <input type="radio" name="q16" id="222radioSuccess2" value="2">
+                                                      <input type="radio" onchange="validate()" name="q16" id="222radioSuccess2" value="2">
                                                        <label for="222radioSuccess2">
                                                         
                                                         Disagree
@@ -847,21 +876,21 @@ if(isset($submitForm)){
                                                   </div></td>
                                                   
                                                  <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q16" id="223radioSuccess3" value="3">
+                                                       <input type="radio" onchange="validate()" name="q16" id="223radioSuccess3" value="3">
                                                        <label for="223radioSuccess3">
                                                         Uncertain
                                                        </label>
                                                   </div></td>
 
                                                   <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q16" id="224radioSuccess4" value="4">
+                                                       <input type="radio" onchange="validate()" name="q16" id="224radioSuccess4" value="4">
                                                        <label for="224radioSuccess4">
                                                         Agree
                                                        </label>
                                                   </div></td>
 
                                                    <td><div class="icheck-success d-inline">
-                                                       <input type="radio" name="q16" id="225radioSuccess5" value="5">
+                                                       <input type="radio" onchange="validate()" name="q16" id="225radioSuccess5" value="5">
                                                        <label for="225radioSuccess5">
                                                         Strongly Agree
                                                        </label>
@@ -871,7 +900,7 @@ if(isset($submitForm)){
                                         </thead>
                                         
                                     </table>
-                                   <input type="submit" name="submitForm" id="submit" class="form-control btn btn-success">
+                                   <input type="submit"  name="submitForm" id="submit" disabled="disabled" class="form-control btn btn-success">
                                   
                                     </form>
                                 </div>
@@ -895,7 +924,7 @@ if(isset($submitForm)){
     </div>
   </aside>
   <!-- /.control-sidebar -->
-<?php include(INCLUDE_PATH.'/layouts/footer.php');?>
+<?php include(BASE_URL.'includes/layouts/footer.php');?>
 </div>
 
 
@@ -911,13 +940,7 @@ if(isset($submitForm)){
 <script src="<?php echo BASE_URL; ?>assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
+
 <!-- daterangepicker -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/moment/moment.min.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/plugins/daterangepicker/daterangepicker.js"></script>
@@ -929,14 +952,14 @@ if(isset($submitForm)){
 <script src="<?php echo BASE_URL; ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo BASE_URL; ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>
 <!-- DataTables -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables/jquery.dataTables.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<!-- Toaster -->
+<script src="<?php echo BASE_URL; ?>assets/plugins/toastr/toastr.min.js"></script>
 <script>
   $(function () {
     $("#example1").DataTable();
@@ -944,14 +967,52 @@ if(isset($submitForm)){
   if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
-
+function validate() {
+ 
+if ($('input[name=q1]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q2]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q3]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q4]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q5]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q6]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q7]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q8]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q9]:checked').length == 0) {
+    // do something h0ere
+}else if ($('input[name=q10]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q11]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q12]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q13]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q14]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q15]:checked').length == 0) {
+    error=1;
+}else if ($('input[name=q16]:checked').length == 0) {
+    error=1;
+}else{
+  error=0;
+}
+if(error==0){
+   $("#submit").removeAttr("disabled","disabled");
+}else{
+// toastr.error('Please attempt all questions.');
+   $("#submit").attr("disabled","disabled");
+}
+}
 </script>
 </body>
 </html>
-<?php include('../../rbac.php'); ?>
-<?php $page_name2=basename($_SERVER['PHP_SELF']); ?>
- <?php canAccess(); ?>
- <?php canCreate($page_name2); ?>  
- <?php canEdit($page_name2); ?>
- <?php canDelete($page_name2); ?>
+
 <?php }else{header("Location:../../index2.php");} ?>

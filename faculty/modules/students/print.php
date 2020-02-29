@@ -451,48 +451,37 @@ $weight15=round((($stdisagree15*1)+($disagree15*2)+($uncertain15*3)+($agree15*4)
 $weight16=round((($stdisagree16*1)+($disagree16*2)+($uncertain16*3)+($agree16*4)+($stagree16*5))/$count,2);
 $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weight8+$weight9+$weight10+$weight11+$weight12+$weight13+$weight14+$weight15+$weight16;
 ?>           
+               <table class="w-100">
+                 <th >
+                    <tr>
+                    <td colspan="2" style="font-weight: bold">Campus</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $campus; ?></td>
+                    <td colspan="2" style="font-weight: bold">Department</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $dept_name; ?></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="font-weight: bold">Program</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $program; ?></td>
+                    <td colspan="2" style="font-weight: bold">Semester</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $semester; ?></td>
+                  </tr>
+                   <tr>
+                    <td colspan="2" style="font-weight: bold">Teacher Name</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $name; ?></td>
+                     <td colspan="2" style="font-weight: bold">Course Title / Course Code</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $course_name." / ".$course_code; ?></td>
+                  </tr>
+                   <tr>
+                    <td colspan="2" style="font-weight: bold">Year Of Survey</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $session; ?></td>
+                    <td colspan="2" style="font-weight: bold">No Of Respondants / No Of Students</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $count." / ".$countTotal; ?></td>
+                  </tr>
+                 </th>
+               </table>
               <table  class="w-100" >
                 <thead>
-                   <tr>
-                    <td colspan="4">Campus</td>
-                    <td colspan="4"><?php echo $campus; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="4">Department</td>
-                    <td colspan="4"><?php echo $dept_name; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="4">Program</td>
-                    <td colspan="4"><?php echo $program; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="4">Semester</td>
-                    <td colspan="4"><?php echo $semester; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Teacher</td>
-                    <td colspan="4"><?php echo $name; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Course Title</td>
-                    <td colspan="4"><?php echo $course_name; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Course Code</td>
-                    <td colspan="4"><?php echo $course_code; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Year Of Survey</td>
-                    <td colspan="4"><?php echo $session; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">No Of Students</td>
-                    <td colspan="4"><?php echo $countTotal; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">No Of Respondants</td>
-                    <td colspan="4"><?php echo $count; ?></td>
-                  </tr>
+                 
                 <tr>
                   <th>Q.NO</th>
                   <th>Parameters</th>
@@ -522,7 +511,7 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td ><h6 class="box-title">The teacher provides relevant/useful course meterial (notes, books references, <br> web reference etc).             
+                    <td ><h6 class="box-title">The teacher provides relevant/useful course material (notes, books references, <br> web reference etc).             
                     </h6></td>
                   <td><?php echo $stdisagree2; ?></td>
                   <td><?php echo $disagree2; ?></td>
@@ -603,11 +592,11 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
                   </tr>
                   <tr>
                     <td><b>C</b></td>
-                    <td colspan="7" style="color:red"><b>CLASS DESCIPLINE</b></td>
+                    <td colspan="7" style="color:red"><b>CLASS DISCIPLINE</b></td>
                   </tr>
                   <tr>
                     <td>9</td>
-                    <td ><h6 class="box-title">The teacher encourages the students to ask questions and participate <br> in the class & provide guidance on course meterial.             
+                    <td ><h6 class="box-title">The teacher encourages the students to ask questions and participate <br> in the class & provide guidance on course material.             
                     </h6></td>
                   <td><?php echo $stdisagree9; ?></td>
                   <td><?php echo $disagree9; ?></td>
@@ -705,28 +694,17 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
                   <tr>
                    <td></td>
                    <td colspan="6"><center><b>Percentage</b></center></td>
-                   <td><b>50</b></td>
+                   <td><b>80</b></td>
                  </tr>
                </tbody>
-                <!-- <tfoot>
-                <tr>
-                  <th>Q.NO</th>
-                  <th>Parameters</th>
-                  <th>Strongly Disagree</th>
-                  <th>Disagree</th>
-                  <th>Uncertain</th>
-                  <th>Agree</th>
-                  <th>Strongly Agree</th>
-                  <th>Weighted Average</th>
-                </tr>
-                </tfoot> -->
               </table>
+              <br><br>
               <div>
-                <b>Assistant Director QEC _______________</b>
+                <!-- <b>Assistant Director QEC _______________</b>
                 <b class="ml-1">Deputy Director QEC _______________</b>
-                <b class="ml-1">Additional Director QEC _______________</b>
+                <b class="ml-1">Additional Director QEC _______________</b> -->
                 <b class="float-sm-right ml-1">Director QEC _______________</b>
-               
+               <br><br>
               <center style="color:red">
                 (Note: If you have any quarries, please contact QEC's staff wthin 10 days from the date of issue)
               </center>

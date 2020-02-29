@@ -93,7 +93,10 @@
           <div class="card">
             <div class="card-header">
               <h2 class="card-title"><b>Reports</b></h2>
-              <a href="<?php echo BASE_URL ;?>modules/students/print.php" class="btn btn-success createBtn float-sm-right">Print Report</a>
+              <button type="button" class="btn btn-danger float-sm-right" data-toggle="modal" data-target="#respondents">
+                 Respondents
+               </button>
+              <a href="<?php echo BASE_URL ;?>modules/students/print.php" target='_blank' class="btn btn-success createBtn float-sm-right">Print Report</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -277,8 +280,10 @@ if (isset($_POST['report'])) {
    $query6=mysqli_query($con,"select * from faculty where srno=".$_POST['faculty']."");
    $row6=mysqli_fetch_array($query6);
    $name=$row6['name'];
-   
+   $studentsIDs = array();
    for ($i=0; $i < $count; $i++) { 
+      $stdID=$rows[$i]['student_id'];
+      $studentsIDs[$i]=$stdID;
       $q1=$rows[$i]['q1'];
       $q2=$rows[$i]['q2'];
       $q3=$rows[$i]['q3'];
@@ -475,7 +480,8 @@ if (isset($_POST['report'])) {
 
  
 
-   } 
+   }
+   
    $weight1=round(((($stdisagree1*1)+($disagree1*2)+($uncertain1*3)+($agree1*4)+($stagree1*5)))/$count,2);
     $weight2=round((($stdisagree2*1)+($disagree2*2)+($uncertain2*3)+($agree2*4)+($stagree2*5))/$count,2);
     $weight3=round((($stdisagree3*1)+($disagree3*2)+($uncertain3*3)+($agree3*4)+($stagree3*5))/$count,2);
@@ -493,49 +499,36 @@ $weight14=round((($stdisagree14*1)+($disagree14*2)+($uncertain14*3)+($agree14*4)
 $weight15=round((($stdisagree15*1)+($disagree15*2)+($uncertain15*3)+($agree15*4)+($stagree15*5))/$count,2);
 $weight16=round((($stdisagree16*1)+($disagree16*2)+($uncertain16*3)+($agree16*4)+($stagree16*5))/$count,2);
 $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weight8+$weight9+$weight10+$weight11+$weight12+$weight13+$weight14+$weight15+$weight16;
-?>           
+?>            <table class="w-100">
+                 <th >
+                    <tr>
+                    <td colspan="2" style="font-weight: bold">Campus</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $campus; ?></td>
+                    <td colspan="2" style="font-weight: bold">Department</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $dept_name; ?></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="font-weight: bold">Program</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $program; ?></td>
+                    <td colspan="2" style="font-weight: bold">Semester</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $semester; ?></td>
+                  </tr>
+                   <tr>
+                    <td colspan="2" style="font-weight: bold">Teacher Name</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $name; ?></td>
+                     <td colspan="2" style="font-weight: bold">Course Title / Course Code</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $course_name." / ".$course_code; ?></td>
+                  </tr>
+                   <tr>
+                    <td colspan="2" style="font-weight: bold">Year Of Survey</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $session; ?></td>
+                    <td colspan="2" style="font-weight: bold">No Of Respondents / No Of Students</td>
+                    <td colspan="2" style="font-weight: bold"><?php echo $count." / ".$countTotal; ?></td>
+                  </tr>
+                 </th>
+               </table>
               <table  class="w-100" >
                 <thead>
-                   <tr>
-                    <td colspan="4">Campus</td>
-                    <td colspan="4"><?php echo $campus; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="4">Department</td>
-                    <td colspan="4"><?php echo $dept_name; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="4">Program</td>
-                    <td colspan="4"><?php echo $program; ?></td>
-                  </tr>
-                  <tr>
-                    <td colspan="4">Semester</td>
-                    <td colspan="4"><?php echo $semester; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Teacher</td>
-                    <td colspan="4"><?php echo $name; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Course Title</td>
-                    <td colspan="4"><?php echo $course_name; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Course Code</td>
-                    <td colspan="4"><?php echo $course_code; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">Year Of Survey</td>
-                    <td colspan="4"><?php echo $session; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">No Of Students</td>
-                    <td colspan="4"><?php echo $countTotal; ?></td>
-                  </tr>
-                   <tr>
-                    <td colspan="4">No Of Respondants</td>
-                    <td colspan="4"><?php echo $count; ?></td>
-                  </tr>
                 <tr>
                   <th>Q.NO</th>
                   <th>Parameters</th>
@@ -565,7 +558,7 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td ><h6 class="box-title">The teacher provides relevant/useful course meterial (notes, books references, <br> web reference etc).             
+                    <td ><h6 class="box-title">The teacher provides relevant/useful course material (notes, books references, <br> web reference etc).             
                     </h6></td>
                   <td><?php echo $stdisagree2; ?></td>
                   <td><?php echo $disagree2; ?></td>
@@ -646,11 +639,11 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
                   </tr>
                   <tr>
                     <td><b>C</b></td>
-                    <td colspan="7" style="color:red"><b>CLASS DESCIPLINE</b></td>
+                    <td colspan="7" style="color:red"><b>CLASS DISCIPLINE</b></td>
                   </tr>
                   <tr>
                     <td>9</td>
-                    <td ><h6 class="box-title">The teacher encourages the students to ask questions and participate <br> in the class & provide guidance on course meterial.             
+                    <td ><h6 class="box-title">The teacher encourages the students to ask questions and participate <br> in the class & provide guidance on course material.             
                     </h6></td>
                   <td><?php echo $stdisagree9; ?></td>
                   <td><?php echo $disagree9; ?></td>
@@ -747,25 +740,13 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
                  </tr>
                   <tr>
                    <td></td>
-                   <td colspan="6"><center><b>Percentage</b></center></td>
-                   <td><b>50</b></td>
+                   <td colspan="6"><center><b>Total</b></center></td>
+                   <td><b>80</b></td>
                  </tr>
                </tbody>
-                <!-- <tfoot>
-                <tr>
-                  <th>Q.NO</th>
-                  <th>Parameters</th>
-                  <th>Strongly Disagree</th>
-                  <th>Disagree</th>
-                  <th>Uncertain</th>
-                  <th>Agree</th>
-                  <th>Strongly Agree</th>
-                  <th>Weighted Average</th>
-                </tr>
-                </tfoot> -->
               </table>
               <a href="<?php echo BASE_URL ;?>modules/students/print.php" class="btn btn-success createBtn float-sm-right">Print Report</a>
-            <?php } ?>
+        <?php } ?> 
 
             </div>
             <!-- /.card-body -->
@@ -883,28 +864,61 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
             </div>
       <!-- MODAL ADD STUDENT END -->
 
-         <!-- MODAL ADD PROGRAM START -->
-        <div class="modal fade" id="edituser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+
+       <!-- MODAL STUDENTS START -->
+        <div class="modal fade" id="respondents" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
               <div class="modal-dialog modal-md" role="document">
                   <div class="modal-content" >
                      <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Edit Faculty</h5><button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                      <h5 class="modal-title" id="exampleModalLongTitle">Respondents/Non Respondents</h5><button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                       </div>
                       <div class="modal-body">
-                    <form action="" method="post" enctype="multipart/form-data" id="editFacultyForm">
-                   <div id="modal_content"></div>
-                  </div>
+                       
+                        <?php 
+                        if (isset($_POST['report'])) {
+                            $semester=$_SESSION['semester'];
+                            $program=$_SESSION['program'];
+                            $campus=$_SESSION['campus'];
+                            $department=$_SESSION['department'];
+                            $respondents=array();
+                            $Nonrespondents=array();
+                           $get_students=$conn->prepare("SELECT *
+                            FROM students WHERE semester_id=:semesterID AND campus_id=:campus AND program_id=:program AND department_id=:department ");
+                            $get_students->bindParam(":semesterID",$semester);
+                            $get_students->bindParam(":campus",$campus);
+                            $get_students->bindParam(":program",$program);
+                            $get_students->bindParam(":department",$department);
+                            $get_students->execute();
+                            $records=$get_students->fetchAll(PDO::FETCH_ASSOC);
+                            $countstd=$get_students->rowCount();
+                            echo "<table class='table'>";
+                            
+                            for ($i=0; $i < $countstd; $i++) { 
+                            echo "<tr>";
+                            if (in_array($records[$i]['srno'], $studentsIDs)) {
+                              echo "<td><span class='d-flex' style='color:green'>".$records[$i]['name']."</td><td>
+                                <i class='ion ion-checkmark' style='color:green;'></i></td>";
+                                $respondents[$i]=$records[$i]['name'];
+
+                            }else{
+                              echo "<td><span class=' d-flex' style='color:red;'>".$records[$i]['name']."</td><td>
+                                <i class='ion ion-close' style='color:red;'></i></td>";
+                                $Nonrespondents[$i]=$records[$i]['name'];
+                            }
+                            echo "</tr>";
+                          }
+                           echo "</table>";
+                         }
+                         ?>
+                      </div>
                   <div class="modal-footer">
-                      <button class="btn btn-light" type="button" data-dismiss="modal">Close</button>
-                         <input  class="btn btn-primary mr-2" type="submit"  name="facultyEdit" onclick="validateEditFaculty()"  value="Save Changes" >
-                        </button>
-                     </div>
-                  </form>
+                    
+                 </div>
              </div>
          </div>
      </div> 
-      <!-- MODAL ADD PROGRAM END -->
-      
+      <!-- MODAL STUDENTS END -->
+         
 <!-- jQuery -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -919,9 +933,6 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
 <script src="<?php echo BASE_URL; ?>assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -935,8 +946,6 @@ $totalScore=$weight1+$weight2+$weight3+$weight4+$weight5+$weight6+$weight7+$weig
 <script src="<?php echo BASE_URL; ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo BASE_URL; ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>
@@ -966,7 +975,7 @@ var program=$("#program").val();
    method:"post",
    data:{semesterID:semesterID,program:program,campus:campus,department:department,courseID:course,getFaculty:'faculty'},
    success:function(result){
-    alert(result);
+    // alert(result);
    $('#faculty')
     .empty()
     .append(result)

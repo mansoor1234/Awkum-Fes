@@ -16,10 +16,10 @@ if (isset($facultyEdit2)) {
 		updated_at=:datetime1 
 		WHERE  `srno`=:id");
 	$update->bindParam(":name",$name);
-	$update->bindParam(":designation",$designation);
+	$update->bindParam(":designation",$designationEdit);
 	$update->bindParam(":campus",$campus);
 	$update->bindParam(":program",$program);
-	$update->bindParam(":department",$department);
+	$update->bindParam(":department",$departmentEdit);
 	$update->bindParam(":semester",$semester);
 	$update->bindParam(":course",$course);
 	$update->bindParam(":id",$facultyEdit2);

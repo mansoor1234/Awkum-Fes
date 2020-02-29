@@ -1,6 +1,7 @@
 <?php include('../../config.php');?>
 <?php include(INCLUDE_PATH . '/logic/add/addSemester.php'); ?>
 <?php include(INCLUDE_PATH . '/logic/add/editSemester.php'); ?>
+<?php include(INCLUDE_PATH . '/logic/add/delete.php'); ?>
 <?php  loginCheck(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,10 +106,12 @@
                     <td><?php  echo $c++;?></td>
                     <td><?php  echo $rows['semester'];?></td>
                    <td>
-                    <button class="btn btn-primary btn-xs editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['srno'];?>" onclick="semEdit(this.value)" id="editBtn">Edit
+                     <form method="POST">
+                      <div class="btn-group">
+                    <button class="btn btn-primary btn-xs editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['srno'];?>" onclick="courseEdit(this.value)" id="editBtn">Edit
                     </button>
-                    <button class="btn btn-danger btn-xs deleteBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['srno'];?>"  id="deleteBtn">Delete
-                    </button></td>
+                    <button name="deleteSemester" class="btn btn-danger btn-xs deleteBtn" type="submit" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['srno'];?>"  id="deleteBtn" onclick="return confirm('Are you sure?')">Delete
+                    </button></div></form></td></td>
                 </tr>
                 <?php }?>
                </tbody>
@@ -201,47 +204,7 @@
          </div>
      </div> 
       <!-- MODAL ADD PROGRAM END -->
-     <!-- MODAL ADD PROGRAM+SEMSTER START -->
-             <div class="modal fade" id="myModal2">
-              <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                
-                  <!-- Modal Header -->
-                  <div class="modal-header">
-                    <h4 class="modal-title">Add Program Semesters </h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  </div>
-                  
-                  <!-- Modal body -->
-                  <div class="modal-body">
-                    <form method="POST" id="addCampusForm">
-                       <div class="row">
-                        <div class="col-lg-8  col-sm-12 offset-2 mb-2">
-                            <div id="output"></div>
-                            <div class="form-group">
-                             <input class="form-control createBtn" type="text" id="program" name="program" required placeholder="Program Name" onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
-                            </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-lg-8  col-sm-12 offset-2 mb-2">
-                            <div class="form-group">
-                             <input class="form-control createBtn" type="text" id="program" name="program" required placeholder="Program Name" onkeypress="return ((event.keyCode>= 97 && event.keyCode <= 122) || (event.keyCode>= 65 && event.keyCode <= 90) || event.keyCode == 8 || event.keyCode == 32);">
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="addProgram" > Save</button>
-                  </div>
-                   </form>
-                </div>
-              </div>
-            </div>
-            
-          <!-- MODAL ADD PROGRAM+SEMSTER END -->  
+    
 <!-- jQuery -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -256,9 +219,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -272,8 +232,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo BASE_URL; ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>

@@ -21,6 +21,17 @@
   $('form').unbind('submit').submit();
   $("#campus").css("border","1px solid green");
 }
+}function checkPass(cpass){
+var pass=$("#pass").val();
+if(pass===cpass){
+$("#pass").css("border","1px solid green");
+$("#cpass").css("border","1px solid green");
+$("#stdSave").removeAttr("disabled","disabled");
+}else if(pass!=cpass){
+$("#pass").css("border","1px solid red");
+$("#cpass").css("border","1px solid red");
+$("#stdSave").attr("disabled","disabled");  
+}
 }function deptEdit(deptID)
 {
  $.ajax(
@@ -221,5 +232,40 @@ if(semester=="0"){
   event.preventDefault();
   event.currentTarget.submit();
 });
+ }
+}function validateCourses(){
+var campus=$("#campus").val(); 
+var department=$("#department").val(); 
+var program=$("#program").val(); 
+var semester=$("#semester").val(); 
+
+if(campus=="0" || department=="0" || program=="0" || semester=="0" ){
+   $("#coursesForm").submit(function(e) {
+    e.preventDefault();
+   });
+   if(campus=="0"){$("#campus").css("border","1px solid red");}else{$("#campus").css("border","1px solid green");}
+   if(department=="0"){$("#department").css("border","1px solid red");}else{$("#department").css("border","1px solid green");}
+   if(program=="0"){$("#program").css("border","1px solid red");}else{$("#program").css("border","1px solid green");}
+   if(semester=="0"){$("#semester").css("border","1px solid red");}else{$("#semester").css("border","1px solid green");}
+ }else{
+   $('#coursesForm').unbind('submit').submit();
+ }
+}
+function validateEditCourses(){
+var campus=$("#campus2").val(); 
+var department=$("#department2").val(); 
+var program=$("#program2").val(); 
+var semester=$("#semester2").val(); 
+
+if(campus=="0" || department=="0" || program=="0" || semester=="0" ){
+   $("#editCourseForm").submit(function(e) {
+    e.preventDefault();
+   });
+   if(campus=="0"){$("#campus2").css("border","1px solid red");}else{$("#campus2").css("border","1px solid green");}
+   if(department=="0"){$("#department2").css("border","1px solid red");}else{$("#department2").css("border","1px solid green");}
+   if(program=="0"){$("#program2").css("border","1px solid red");}else{$("#program2").css("border","1px solid green");}
+   if(semester=="0"){$("#semester2").css("border","1px solid red");}else{$("#semester2").css("border","1px solid green");}
+ }else{
+   $('#editCourseForm').unbind('submit').submit();
  }
 }

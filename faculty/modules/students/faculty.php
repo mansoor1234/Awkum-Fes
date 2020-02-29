@@ -1,6 +1,7 @@
 <?php include('../../config.php');?>
 <?php include(INCLUDE_PATH . '/logic/add/addFaculty.php'); ?>
-<?php include(INCLUDE_PATH . '/logic/add/editFaculty.php'); ?>
+
+<?php include(INCLUDE_PATH . '/logic/add/delete.php'); ?>
 <?php  loginCheck(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -130,11 +131,13 @@
                     <td><?php  echo $rows['program'];?></td>
                     <td><?php  echo $rows['semester'];?></td>
                     <td>
-                      <div class="btn-group">
+                    <form method="POST">
+                    <div class="btn-group">
                     <button class="btn btn-primary btn-sm editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['FID'];?>" onclick="facultyEdit(this.value)" id="editBtn"> Edit
                     </button>
-                    <button class="btn btn-danger btn-sm editBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['FID'];?>"  id="deleteBtn">Delete
-                    </button></div></td>
+                    <form method="POST">
+                    <button type="submit" class="btn btn-danger btn-sm editBtn" type="button" data-toggle="modal" data-target="#changeImage" name="deleteFaculty" value="<?php echo $rows['FID'];?>"  id="deleteBtn" onclick="return confirm('Are you sure?')">Delete
+                    </button></div></form></td>
                 </tr>
                 <?php }?>
                </tbody>
@@ -295,9 +298,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -311,8 +311,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo BASE_URL; ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>
@@ -334,6 +332,7 @@ $(".chosen-select").chosen({
 if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
+
 </script>
 </body>
 </html>

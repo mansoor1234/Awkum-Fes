@@ -1,5 +1,4 @@
 
-<?php include('config.php');?>
 <?php include('stdModule/studentLogin/login.php'); ?>
 <!DOCTYPE html>
 <html>
@@ -24,7 +23,8 @@
 <body class="hold-transition register-page">
 <div class="register-box">
   <div class="register-logo">
-    <a href="../../index2.html"><b>AWKUM<b></a>
+    <img src="<?php echo BASE_URL ;?>assets/img/logo.jpg" style="width: 101px;"><br>
+    <b><a href="../../index2.html"><b>AWKUM TEF<b></a></b>
   </div>
 
   <div class="card">

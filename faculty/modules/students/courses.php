@@ -1,6 +1,7 @@
 <?php include('../../config.php');?>
 <?php include(INCLUDE_PATH . '/logic/add/addCourse.php'); ?>
 <?php include(INCLUDE_PATH . '/logic/add/editCourse.php'); ?>
+<?php include(INCLUDE_PATH . '/logic/add/delete.php'); ?>
 <?php  loginCheck(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,10 +108,12 @@
                     <td><?php  echo $rows['course_name'];?></td>
                     <td><?php  echo $rows['course_code'];?></td>
                    <td>
+                    <form method="POST">
+                      <div class="btn-group">
                     <button class="btn btn-primary btn-xs editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['srno'];?>" onclick="courseEdit(this.value)" id="editBtn">Edit
                     </button>
-                    <button class="btn btn-danger btn-xs deleteBtn" type="button" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['srno'];?>"  id="deleteBtn">Delete
-                    </button></td>
+                    <button name="deleteCourse" class="btn btn-danger btn-xs deleteBtn" type="submit" data-toggle="modal" data-target="#changeImage" value="<?php echo $rows['srno'];?>"  id="deleteBtn" onclick="return confirm('Are you sure?')">Delete
+                    </button></div></form></td>
                 </tr>
                 <?php }?>
                </tbody>
@@ -161,7 +164,7 @@
                   
                   <!-- Modal body -->
                   <div class="modal-body">
-                    <form method="POST" id="">
+                    <form method="POST" id="coursesForm">
                        <div class="row">
                         <div class="col-lg-8  col-sm-12 offset-2 mb-2">
                             <div id="output"></div>
@@ -218,7 +221,7 @@
                   <!-- Modal footer -->
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="addCourse" >Save </button>
+                    <button type="submit" class="btn btn-primary" name="addCourse" onclick="validateCourses()">Save </button>
                   </div>
                    </form>
                 </div>
@@ -235,12 +238,12 @@
                       <h5 class="modal-title" id="exampleModalLongTitle">Edit Program</h5><button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                       </div>
                       <div class="modal-body">
-                    <form action="" method="post" enctype="multipart/form-data" id="editProgForm">
+                    <form action="" method="post" enctype="multipart/form-data" id="editCourseForm">
                    <div id="modal_content"></div>
                   </div>
                   <div class="modal-footer">
                       <button class="btn btn-light" type="button" data-dismiss="modal">Close</button>
-                         <input  class="btn btn-primary mr-2" type="submit"  name="courseEdit"  value="Save Changes" >
+                         <input  class="btn btn-primary mr-2" type="submit"  name="courseEdit" onclick="validateEditCourses()"  value="Save Changes" >
                         </button>
                      </div>
                   </form>
@@ -263,9 +266,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -279,8 +279,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo BASE_URL; ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>
@@ -298,6 +296,8 @@
 if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
+
+
 </script>
 </body>
 </html>

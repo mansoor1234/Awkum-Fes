@@ -59,7 +59,7 @@ extract($rows);
 <div class="row">
   <div class="col-lg-6 col-sm-12 mb-2">
       <div class="form-group">
-          <select  class="form-control createBtn " name="campus" id="campus" onchange="getDepartment(this.value)">
+          <select  class="form-control createBtn " name="campus" id="campus2" onchange="getDepartment(this.value)">
               <option value="<?php echo $campid; ?>"><?php echo $campus; ?></option>
               <?php $query=mysqli_query($con,"select * from campus"); ?>
               <?php while($rows1=mysqli_fetch_array($query)){ ?>
@@ -70,7 +70,7 @@ extract($rows);
   </div>
   <div class="col-lg-6 col-sm-12 mb-2">
       <div class="form-group">
-         <select  class="form-control createBtn " name="department" id="department" onchange="getProgram(this.value)">
+         <select  class="form-control createBtn " name="department" id="department2" onchange="getProgram(this.value)">
 
               <option value="<?php echo $did; ?>"><?php echo $dept_name; ?></option>
               <option value="0">Choose Department</option>
@@ -86,9 +86,9 @@ extract($rows);
 <div class="row">
   <div class="col-lg-6 col-sm-12 mb-2">
       <div class="form-group">
-        <select  class="form-control createBtn  " name="program"  onchange="getSemester(this.value)">
+        <select  class="form-control createBtn  " name="program"  id="program2" onchange="getSemester(this.value)">
               
-              <option value="<?php echo $did; ?>"><?php echo $program; ?></option>
+              <option value="<?php echo $progid; ?>"><?php echo $program; ?></option>
               <option value="0">Choose Program</option>
               <?php $query=mysqli_query($con,"SELECT programs.srno as ProgId,programs.program FROM department INNER JOIN dept_program ON department.srno = dept_program.dept_id INNER JOIN programs ON programs.srno = dept_program.program_id WHERE dept_id='$did'"); ?>
               <option value="<?php echo $progid; ?>"><?php echo $program; ?></option>
@@ -101,7 +101,7 @@ extract($rows);
   </div>
   <div class="col-lg-6 col-sm-12 mb-2">
       <div class="form-group">
-        <select  class="form-control createBtn " name="semester" id="semester" onchange="getCourse(this.value)">
+        <select  class="form-control createBtn " name="semester" id="semester2" onchange="getCourse(this.value)">
               
               <option value="<?php echo $sid; ?>"><?php echo $semester; ?></option>
               <option value="0">Choose Semester</option>

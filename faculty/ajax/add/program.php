@@ -51,7 +51,8 @@ extract($rows);
 <?php 
 if (isset($_POST['DeptID'])) {
   $DeptID=$_POST['DeptID'];
-  $get_dept_data=$conn->prepare("SELECT programs.srno as ProgId,programs.program FROM department INNER JOIN dept_program ON department.srno = dept_program.dept_id INNER JOIN programs ON programs.srno = dept_program.program_id WHERE dept_id=:DeptID");
+  $get_dept_data=$conn->prepare("SELECT programs.srno as ProgId,programs.program FROM department 
+    INNER JOIN dept_program ON department.srno = dept_program.dept_id INNER JOIN programs ON programs.srno = dept_program.program_id WHERE dept_id=:DeptID");
   $get_dept_data->bindParam(":DeptID",$DeptID);
   $get_dept_data->execute();
   $rows1=$get_dept_data->fetchAll(PDO::FETCH_ASSOC);

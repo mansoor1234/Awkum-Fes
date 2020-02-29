@@ -96,6 +96,9 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Students List</h3>
+              <div class="custom-control custom-switch custom-switch-off-light custom-switch-on-primary float-right">
+                <input type="checkbox" name="" class="custom-control-input"  value="1" id="checkall" ><label class="custom-control-label" for="checkall">Disable All</label>
+              </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -112,6 +115,7 @@
                   <th>Reg.NO</th>
                   <th>Email</th>
                   <th>Contact</th>
+                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
                 </thead>
@@ -120,8 +124,9 @@
                                          
                     $c=1;
                     $userID=$_SESSION['user']['User'];
-                    $get_users=mysqli_query($con,"SELECT students.srno as STID,students.name,students.f_name,students.email,students.contact,students.reg_no,campus.campus,department.dept_name,programs.program,semester.semester FROM students LEFT JOIN campus ON students.campus_id = campus.srno LEFT JOIN department ON students.department_id = department.srno LEFT JOIN programs ON students.program_id = programs.srno LEFT JOIN semester ON students.semester_id = semester.srno");
+                    $get_users=mysqli_query($con,"SELECT students.srno as STID,students.status as Status,students.name,students.f_name,students.email,students.contact,students.reg_no,campus.campus,department.dept_name,programs.program,semester.semester FROM students LEFT JOIN campus ON students.campus_id = campus.srno LEFT JOIN department ON students.department_id = department.srno LEFT JOIN programs ON students.program_id = programs.srno LEFT JOIN semester ON students.semester_id = semester.srno");
                     while($rows=mysqli_fetch_array($get_users)){
+                      $status=$rows['Status'];
                     ?>
                 <tr>
                     <td><?php  echo $c++;?></td>
@@ -134,6 +139,18 @@
                     <td><?php  echo $rows['reg_no'];?></td>
                     <td><?php  echo $rows['email'];?></td>
                     <td><?php  echo $rows['contact'];?></td>
+                    <td><?php if($status==1): ?>
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox"  name="status" value="1" class="PermissionSetup custom-control-input editBtn" onchange="ChangeStudentStatus(<?php echo $rows['STID'];?>,0)" id="customSwitch<?php echo $rows['STID'];?>" checked="">
+                      <label class="custom-control-label" for="customSwitch<?php echo $rows['STID'];?>"></label>
+                    </div>
+                    <?php elseif($status==0): ?>
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input PermissionSetup editBtn" name="status" value="1"  onchange="ChangeStudentStatus(<?php echo $rows['STID'];?>,1)" id="customSwitch2<?php echo $rows['STID'];?>">
+                      <label class="custom-control-label" for="customSwitch2<?php echo $rows['STID'];?>"></label>
+                    </div>
+                     <?php endif; ?>
+                    </td>
                     <td>
                       <div class="btn-group">
                     <button class="btn btn-primary btn-sm editBtn"  type="button" data-toggle="modal" data-target="#edituser" value="<?php echo $rows['STID'];?>" onclick="userEdit(this.value)" id="editBtn"> Edit
@@ -376,9 +393,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo BASE_URL; ?>assets/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="<?php echo BASE_URL; ?>assets/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -392,8 +406,6 @@
 <script src="<?php echo BASE_URL; ?>assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo BASE_URL; ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo BASE_URL; ?>assets/dist/js/demo.js"></script>
 <script src="<?php echo BASE_URL; ?>assets/dist/js/main.js"></script>
@@ -412,21 +424,46 @@ $(".chosen-select").chosen({
   $(function () {
     $("#example1").DataTable();
  });
-function checkPass(cpass){
-var pass=$("#pass").val();
-if(pass===cpass){
-$("#pass").css("border","1px solid green");
-$("#cpass").css("border","1px solid green");
-$("#stdSave").removeAttr("disabled","disabled");
-}else if(pass!=cpass){
-$("#pass").css("border","1px solid red");
-$("#cpass").css("border","1px solid red");
-$("#stdSave").attr("disabled","disabled");  
-}
-}
+
 if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
+function ChangeStudentStatus(id,status){
+ $.ajax(
+{
+url: '../../ajax/students/changeStatus.php',
+type: 'POST',
+data:{userid:id,status:status},
+success:function(result){
+}
+}); 
+}
+$("#checkall").change(function(){
+if($(this).val()!=1){
+  $(this).val(1);
+ $("input[type=checkbox]").removeAttr('checked','checked');
+  $.ajax(
+{
+url: '../../ajax/students/changeStatus.php',
+type: 'POST',
+data:{checkAll:'0'},
+success:function(result){
+}
+});
+}else{
+ $(this).val(0);
+ $("input[type=checkbox]").attr('checked','checked'); 
+$.ajax(
+{
+url: '../../ajax/students/changeStatus.php',
+type: 'POST',
+data:{checkAll:'1'},
+success:function(result){
+}
+});
+}
+});
+
 </script>
 </body>
 </html>
